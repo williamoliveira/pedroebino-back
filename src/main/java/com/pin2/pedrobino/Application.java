@@ -42,20 +42,6 @@ public class Application {
                 .run(args);
     }
 
-//    @Bean
-//    public ServletRegistrationBean jerseyServlet() {
-//        ServletRegistrationBean registration = new ServletRegistrationBean(
-//                new ServletContainer(), "/*"
-//        );
-//
-//        registration.addInitParameter(
-//                ServletProperties.JAXRS_APPLICATION_CLASS,
-//                LoggingInitialization.class.getName()
-//        );
-//
-//        return registration;
-//    }
-
     /**
      * Keeps the session open until the end of a request. Allows us to use lazy-loading with Hibernate.
      */
