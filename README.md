@@ -1,5 +1,7 @@
 # Pedro&Bino Backend
 
+[Repositório do Frontend](https://github.com/williamoliveira/pedroebino-front)
+
 ## Descrição
 
 Backend da aplicação Pedro&Bino, construída em Java como sendo um servidor API REST HTTP,
