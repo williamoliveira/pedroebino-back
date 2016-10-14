@@ -1,7 +1,6 @@
 package com.pin2.pedrobino;
 
 import com.pin2.pedrobino.configurations.ApplicationConfiguration;
-import com.pin2.pedrobino.configurations.filters.CorsFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.AuthenticationManagerConfiguration;
 import org.springframework.boot.autoconfigure.security.FallbackWebSecurityAutoConfiguration;
@@ -50,8 +49,8 @@ public class Application {
         return new OpenEntityManagerInViewFilter();
     }
 
-    @Bean
-    public CorsFilter apiOriginFilter() {
-        return new CorsFilter();
-    }
+//    @Bean
+//    public ApiOriginsFilter apiOriginFilter() {
+//        return new ApiOriginsFilter();
+//    }
 }

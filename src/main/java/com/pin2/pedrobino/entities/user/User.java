@@ -1,13 +1,13 @@
-package com.pin2.pedrobino.domain.auth;
+package com.pin2.pedrobino.entities.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pin2.pedrobino.domain.administrator.Administrator;
-import com.pin2.pedrobino.domain.client.Client;
+import com.pin2.pedrobino.entities.administrator.Administrator;
+import com.pin2.pedrobino.entities.client.Client;
+import com.pin2.pedrobino.entities.person.Person;
 import org.hibernate.annotations.Any;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.MetaValue;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 
@@ -29,7 +29,7 @@ public class User {
     private String password;
 
     @Any(
-            metaColumn = @Column(name="role_type", length=3),
+            metaColumn = @Column(name="person_type", length=3),
             fetch = FetchType.LAZY
     )
     @AnyMetaDef(
@@ -40,8 +40,8 @@ public class User {
                     @MetaValue(targetEntity = Client.class, value = "CLI" )
             }
     )
-    @JoinColumn(name="role_id" )
-    private Role role;
+    @JoinColumn(name="person_id" )
+    private Person person;
 
     public User() {}
 
@@ -49,20 +49,20 @@ public class User {
         this.id = user.getId();
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.role = user.getRole();
+        this.person = user.getPerson();
     }
 
-    public User(long id, String email, String password, Role role) {
+    public User(String email, String password, Person person) {
+        this.email = email;
+        this.password = password;
+        this.person = person;
+    }
+
+    public User(long id, String email, String password, Person person) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.role = role;
-    }
-
-    public User(String email, String password, Role role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
+        this.person = person;
     }
 
     public long getId() {
@@ -89,11 +89,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

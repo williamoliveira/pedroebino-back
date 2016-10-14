@@ -1,16 +1,24 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.domain.administrator.Administrator;
-import com.pin2.pedrobino.domain.administrator.AdministratorsRepository;
-import com.pin2.pedrobino.domain.auth.User;
-import com.pin2.pedrobino.domain.auth.UsersRepository;
-import com.pin2.pedrobino.domain.client.Client;
-import com.pin2.pedrobino.domain.client.ClientsRepository;
+import com.pin2.pedrobino.entities.administrator.Administrator;
+import com.pin2.pedrobino.entities.administrator.AdministratorsRepository;
+import com.pin2.pedrobino.entities.city.CitiesRepository;
+import com.pin2.pedrobino.entities.city.City;
+import com.pin2.pedrobino.entities.city.State;
+import com.pin2.pedrobino.entities.city.StatesRepository;
+import com.pin2.pedrobino.entities.driver.Driver;
+import com.pin2.pedrobino.entities.driver.DriversRepository;
+import com.pin2.pedrobino.entities.user.User;
+import com.pin2.pedrobino.entities.user.UsersRepository;
+import com.pin2.pedrobino.entities.client.Client;
+import com.pin2.pedrobino.entities.client.ClientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/seed")
@@ -26,6 +34,16 @@ public class SeederController {
     @Autowired
     private ClientsRepository clientsRepository;
 
+    @Autowired
+    private StatesRepository statesRepository;
+
+    @Autowired
+    private CitiesRepository citiesRepository;
+
+    @Autowired
+    private DriversRepository driversRepository;
+
+    @PostConstruct
     @RequestMapping
     public String seed() {
 
@@ -43,6 +61,20 @@ public class SeederController {
         User clientUser = new User("johndoe@gmail.com", (new BCryptPasswordEncoder()).encode("12345678"), client);
         usersRepository.save(clientUser);
 
+        // States
+        State sc = new State("SC", "Santa Catarina");
+        State rs = new State("RS", "Rio Grande do Sul");
+        State pr = new State("PR", "Paraná");
+        statesRepository.save(sc);
+        statesRepository.save(rs);
+        statesRepository.save(pr);
+
+        City ibirama = new City("Ibirama", sc);
+        citiesRepository.save(ibirama);
+
+        // Drivers
+        Driver driver = new Driver("João Machado", 5000, 20, 3000, "D", ibirama);
+        driversRepository.save(driver);
 
         return "All seeded.";
     }

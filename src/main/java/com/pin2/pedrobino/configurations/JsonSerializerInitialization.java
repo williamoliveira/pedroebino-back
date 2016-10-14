@@ -1,6 +1,7 @@
 package com.pin2.pedrobino.configurations;
 
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,8 @@ public class JsonSerializerInitialization {
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
                 .configure(SerializationFeature.INDENT_OUTPUT, true)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .registerModule(new JavaTimeModule());
+                .registerModule(new JavaTimeModule())
+                .registerModule(new Hibernate5Module());
     }
 
     @Bean

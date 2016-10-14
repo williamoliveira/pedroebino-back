@@ -1,6 +1,6 @@
 package com.pin2.pedrobino.configurations;
 
-import com.pin2.pedrobino.services.auth.CustomUserDetailsService;
+import com.pin2.pedrobino.support.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -37,9 +38,9 @@ public class OAuth2ServerConfiguration {
         public void configure(HttpSecurity http) throws Exception {
 
             http.authorizeRequests()
-//                    .antMatchers("/users").hasRole("ADMIN");
-                    .antMatchers("/oauth/token").authenticated();
-
+                    .antMatchers("/users").hasRole("ADMIN")
+                    .antMatchers("/me").hasRole("USER")
+                    .antMatchers("/oauth/token").permitAll();
         }
 
     }
@@ -58,6 +59,7 @@ public class OAuth2ServerConfiguration {
         @Autowired
         private CustomUserDetailsService userDetailsService;
 
+
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
@@ -70,12 +72,19 @@ public class OAuth2ServerConfiguration {
         }
 
         @Override
+        public void configure(AuthorizationServerSecurityConfigurer oauthServer)
+                throws Exception {
+            oauthServer
+                    .tokenKeyAccess("permitAll()")
+                    .checkTokenAccess("isAuthenticated()");
+        }
+
+        @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients
                     .inMemory()
-                    .withClient("clientapp").secret("123456")
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .authorities("USER")
+                    .withClient("public").secret("public")
+                    .authorizedGrantTypes("client_credentials", "password", "refresh_token")
                     .scopes("read", "write")
                     .resourceIds(RESOURCE_ID);
 

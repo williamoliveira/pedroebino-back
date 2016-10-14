@@ -1,4 +1,4 @@
-package com.pin2.pedrobino.domain.person;
+package com.pin2.pedrobino.entities.person;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -40,4 +40,5 @@ public abstract class Person {
     public void setName(String name) {
         this.name = name;
     }
+
 }

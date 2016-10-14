@@ -1,39 +1,33 @@
 package com.pin2.pedrobino.controllers;
 
 import com.pin2.pedrobino.exceptions.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.pin2.pedrobino.support.repository.BaseRepository;
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 abstract public class ResourceController<T> {
 
-    private JpaRepository<T, Long> repository;
+    protected BaseRepository<T> repository;
 
-    public ResourceController(JpaRepository<T, Long> repository) {
+    public ResourceController(BaseRepository<T> repository) {
         this.repository = repository;
     }
 
     @RequestMapping
-    public Page<T> getMany(
-            @RequestParam(required=false, defaultValue="1") Integer page,
-            @RequestParam(required=false, defaultValue="15") Integer pageSize,
-            @RequestParam(required=false, defaultValue="DESC") String sort
-    ) {
+    public Iterable<T> getMany(@QuerydslPredicate Predicate predicate,
+                               Pageable pageable,
+                               @RequestParam MultiValueMap<String, String> parameters) {
 
-        PageRequest pageRequest = new PageRequest(
-                page-1,
-                pageSize,
-                Sort.Direction.fromString(sort),
-                "id"
-        );
-
-        return repository.findAll(pageRequest);
+        return shouldPaginate(parameters)
+                ? repository.findAll(predicate, pageable)
+                : repository.findAll(predicate, pageable.getSort());
     }
 
     @RequestMapping("/{id}")
@@ -47,14 +41,25 @@ abstract public class ResourceController<T> {
 
     @RequestMapping(
             method = RequestMethod.POST,
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            }
     )
     @ResponseStatus(HttpStatus.OK)
     public T create(@RequestBody T resource) {
         return repository.save(resource);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(
+            method = RequestMethod.PUT,
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            }
+    )
     public T update(@Valid T resource) {
         return repository.save(resource);
     }
@@ -63,4 +68,11 @@ abstract public class ResourceController<T> {
     public void delete(@PathVariable long id) {
         repository.delete(id);
     }
+
+    private boolean shouldPaginate(MultiValueMap<String, String> parameters) {
+        return !parameters.containsKey("paginate")
+                || Boolean.parseBoolean(parameters.getFirst("paginate"));
+
+    }
+
 }

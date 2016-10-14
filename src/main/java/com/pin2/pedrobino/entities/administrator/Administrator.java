@@ -1,14 +1,13 @@
-package com.pin2.pedrobino.domain.administrator;
+package com.pin2.pedrobino.entities.administrator;
 
-import com.pin2.pedrobino.domain.auth.Role;
-import com.pin2.pedrobino.domain.person.Person;
+import com.pin2.pedrobino.entities.person.Person;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "administrators")
 @DiscriminatorValue("ADM")
-public class Administrator extends Person implements Role {
+public class Administrator extends Person {
 
     public Administrator() {
     }
@@ -21,8 +20,4 @@ public class Administrator extends Person implements Role {
         super(name);
     }
 
-    @Override
-    public String getRoleName() {
-        return "ADMIN";
-    }
 }

@@ -16,7 +16,9 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "main.persistence", repositoryFactoryBeanClass = JpaRepositoryFactoryBean.class)
+@EnableJpaRepositories(
+        basePackages = "com.pin2.pedrobino.entities",
+        repositoryFactoryBeanClass = JpaRepositoryFactoryBean.class)
 public class SqlInitialization {
     private org.apache.tomcat.jdbc.pool.DataSource pool;
 
@@ -35,28 +37,28 @@ public class SqlInitialization {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean emFactory = new LocalContainerEntityManagerFactoryBean();
 
         //Allow JodaTime
-        entityManagerFactoryBean.getJpaPropertyMap().put("jadira.usertype.autoRegisterUserTypes", "true");
+        emFactory.getJpaPropertyMap().put("jadira.usertype.autoRegisterUserTypes", "true");
 
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        emFactory.getJpaPropertyMap().put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
+        emFactory.getJpaPropertyMap().put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
+        emFactory.getJpaPropertyMap().put("hibernate.temp.use_jdbc_metadata_defaults", "false");
 
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.jadira.usertype.autoRegisterUserTypes", "true");
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.jadira.usertype.javaZone", "UTC");
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.jadira.usertype.databaseZone", "UTC");
+        emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.autoRegisterUserTypes", "true");
+        emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.javaZone", "UTC");
+        emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.databaseZone", "UTC");
 
-        entityManagerFactoryBean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
+        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
 
         HibernateJpaVendorAdapter hibernateAdapter = new HibernateJpaVendorAdapter();
-        entityManagerFactoryBean.setJpaVendorAdapter(hibernateAdapter);
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.pin2.pedrobino.domain");
+        emFactory.setJpaVendorAdapter(hibernateAdapter);
+        emFactory.setDataSource(dataSource());
+        emFactory.setPackagesToScan("com.pin2.pedrobino.entities");
 
 
-        return entityManagerFactoryBean;
+        return emFactory;
     }
 
     @Bean(destroyMethod = "close")
