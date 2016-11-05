@@ -1,5 +1,7 @@
 package com.pin2.pedrobino.configurations.filters;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ApiOriginsFilter extends OncePerRequestFilter {
 
     private static final String MAX_PRE_FLIGHT_CACHE_SECONDS = String.valueOf(60 * 60 * 24);
@@ -19,8 +22,6 @@ public class ApiOriginsFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-
-        System.out.println("called");
 
         response.addHeader("Cache-Control", "no-cache");
         response.addHeader("Access-Control-Allow-Origin", "*");

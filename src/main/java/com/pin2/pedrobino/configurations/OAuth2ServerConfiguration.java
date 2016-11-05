@@ -39,7 +39,7 @@ public class OAuth2ServerConfiguration {
 
             http.authorizeRequests()
                     .antMatchers("/users").hasRole("ADMIN")
-                    .antMatchers("/me").hasRole("USER")
+                    .antMatchers("/profile").hasRole("USER")
                     .antMatchers("/oauth/token").permitAll();
         }
 

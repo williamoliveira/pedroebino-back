@@ -30,11 +30,12 @@ public class User {
 
     @Any(
             metaColumn = @Column(name="person_type", length=3),
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER,
+            optional = false
     )
     @AnyMetaDef(
             idType = "long",
-            metaType = "string" ,
+            metaType = "string",
             metaValues = {
                     @MetaValue(targetEntity = Administrator.class, value = "ADM" ),
                     @MetaValue(targetEntity = Client.class, value = "CLI" )

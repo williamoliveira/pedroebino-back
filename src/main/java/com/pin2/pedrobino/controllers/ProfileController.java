@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController
 @EnableResourceServer
+@RequestMapping("/profile")
 public class ProfileController {
 
     @RequestMapping("/me")

@@ -7,11 +7,10 @@ import com.pin2.pedrobino.entities.client.Client;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class AuthUser  extends User implements UserDetails {
+public class AuthUser extends User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     public AuthUser(User user) {
@@ -21,15 +20,19 @@ public class AuthUser  extends User implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<AuthRole> roles = new HashSet<>();
+        return getRoles().stream().map(AuthRole::new).collect(Collectors.toSet());
+    }
 
-        roles.add(new AuthRole("USER"));
+    public List<String> getRoles(){
+        List<String> roles = new ArrayList<>();
+
+        roles.add("USER");
 
         if(getPerson() instanceof Administrator){
-            roles.add(new AuthRole("ADMIN"));
+            roles.add("ADMIN");
         }
         else if(getPerson() instanceof Client){
-            roles.add(new AuthRole("CLIENT"));
+            roles.add("CLIENT");
         }
 
         return roles;

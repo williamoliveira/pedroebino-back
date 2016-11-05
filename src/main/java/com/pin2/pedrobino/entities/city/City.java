@@ -1,6 +1,5 @@
 package com.pin2.pedrobino.entities.city;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;

@@ -73,6 +73,11 @@
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.1.16</version>
+        </dependency>
 
         <!-- Jackson -->
         <dependency>
