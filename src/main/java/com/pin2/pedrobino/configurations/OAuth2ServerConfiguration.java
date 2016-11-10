@@ -38,8 +38,10 @@ public class OAuth2ServerConfiguration {
         public void configure(HttpSecurity http) throws Exception {
 
             http.authorizeRequests()
-                    .antMatchers("/users").hasRole("ADMIN")
-                    .antMatchers("/profile").hasRole("USER")
+                    .anyRequest().authenticated()
+                    .antMatchers("/users**").hasRole("ADMIN")
+                    .antMatchers("/trucks**").hasRole("ADMIN")
+                    .antMatchers("/drivers**").hasRole("ADMIN")
                     .antMatchers("/oauth/token").permitAll();
         }
 

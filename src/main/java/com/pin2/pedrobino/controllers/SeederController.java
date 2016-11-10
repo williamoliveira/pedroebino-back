@@ -63,17 +63,23 @@ public class SeederController {
 
         // States
         State sc = new State("SC", "Santa Catarina");
-        State rs = new State("RS", "Rio Grande do Sul");
         State pr = new State("PR", "Paraná");
+        State rs = new State("RS", "Rio Grande do Sul");
         statesRepository.save(sc);
         statesRepository.save(rs);
         statesRepository.save(pr);
 
-        City ibirama = new City("Ibirama", sc);
-        citiesRepository.save(ibirama);
+        City fl = new City("Florianópolis", sc);
+        citiesRepository.save(fl);
+
+        City cb = new City("Curitiba", pr);
+        citiesRepository.save(cb);
+
+        City pa = new City("Porto Alegre", rs);
+        citiesRepository.save(pa);
 
         // Drivers
-        Driver driver = new Driver("João Machado", 5000, 20, 3000, "D", ibirama);
+        Driver driver = new Driver("João Machado", 5000, 20, 3000, "D", pa);
         driversRepository.save(driver);
 
         return "All seeded.";

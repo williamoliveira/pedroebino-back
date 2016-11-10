@@ -5,6 +5,8 @@ import com.pin2.pedrobino.entities.client.Client;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -16,16 +18,19 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "can_share")
     private boolean canShare;
 
-    @NotEmpty
-    @Column(name = "created_at")
-    private Date createdAt;
+    @NotNull
+    @Column(name = "prefered_date")
+    private Date preferedDate;
 
-    @NotEmpty
-    private double time;
+    @Column(name = "estimated_travel_duration")
+    private double estimatedTravelDuration;
+
+    @Min(0)
+    private double volume;
 
     @NotEmpty
     private String status;
@@ -68,20 +73,28 @@ public class Request {
         this.canShare = canShare;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getPreferedDate() {
+        return preferedDate;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setPreferedDate(Date preferedDate) {
+        this.preferedDate = preferedDate;
     }
 
-    public double getTime() {
-        return time;
+    public double getEstimatedTravelDuration() {
+        return estimatedTravelDuration;
     }
 
-    public void setTime(double time) {
-        this.time = time;
+    public void setEstimatedTravelDuration(double estimatedTravelDuration) {
+        this.estimatedTravelDuration = estimatedTravelDuration;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public String getStatus() {

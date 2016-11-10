@@ -1,5 +1,6 @@
 package com.pin2.pedrobino.controllers;
 
+import com.pin2.pedrobino.entities.user.User;
 import com.pin2.pedrobino.exceptions.ResourceNotFoundException;
 import com.pin2.pedrobino.support.repository.BaseRepository;
 import com.querydsl.core.types.Predicate;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +76,12 @@ abstract public class ResourceController<T> {
         return !parameters.containsKey("paginate")
                 || Boolean.parseBoolean(parameters.getFirst("paginate"));
 
+    }
+
+    protected User getCurrentUser(){
+        return (User)((OAuth2Authentication) SecurityContextHolder
+                .getContext().getAuthentication())
+                .getPrincipal();
     }
 
 }
