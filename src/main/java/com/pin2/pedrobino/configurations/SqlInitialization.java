@@ -49,6 +49,7 @@ public class SqlInitialization {
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.autoRegisterUserTypes", "true");
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.javaZone", "UTC");
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.databaseZone", "UTC");
+        emFactory.getJpaPropertyMap().put("hibernate.show_sql", "true");
 
         emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
 

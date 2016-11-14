@@ -14,7 +14,7 @@ url: jdbc:postgresql://127.0.0.1:5432/pedrobino
 properties:
   charSet: UTF-8
 
-# the maximum amount of time to wait on an empty pool before throwing an exception
+# the maximum amount of ConverTime to wait on an empty pool before throwing an exception
 maxWaitForConnection: 1
 
 # the SQL query to run when validating a connection's liveness

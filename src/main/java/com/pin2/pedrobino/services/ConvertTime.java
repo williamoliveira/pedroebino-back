@@ -1,0 +1,7 @@
+package com.pin2.pedrobino.services;
+
+public class ConvertTime {
+    public static float fromSecondsToHours(long seconds){
+        return seconds / 3600;
+    }
+}

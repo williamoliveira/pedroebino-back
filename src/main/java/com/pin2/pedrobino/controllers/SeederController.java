@@ -8,20 +8,30 @@ import com.pin2.pedrobino.entities.city.State;
 import com.pin2.pedrobino.entities.city.StatesRepository;
 import com.pin2.pedrobino.entities.driver.Driver;
 import com.pin2.pedrobino.entities.driver.DriversRepository;
+import com.pin2.pedrobino.entities.request.Proposal;
+import com.pin2.pedrobino.entities.request.ProposalsRepository;
+import com.pin2.pedrobino.entities.request.Request;
+import com.pin2.pedrobino.entities.request.RequestsRepository;
+import com.pin2.pedrobino.entities.truck.Truck;
+import com.pin2.pedrobino.entities.truck.TrucksRepository;
 import com.pin2.pedrobino.entities.user.User;
 import com.pin2.pedrobino.entities.user.UsersRepository;
 import com.pin2.pedrobino.entities.client.Client;
 import com.pin2.pedrobino.entities.client.ClientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/seed")
 @Transactional
 public class SeederController {
 
@@ -43,8 +53,16 @@ public class SeederController {
     @Autowired
     private DriversRepository driversRepository;
 
+    @Autowired
+    private TrucksRepository trucksRepository;
+
+    @Autowired
+    private ProposalsRepository proposalsRepository;
+
+    @Autowired
+    private RequestsRepository requestsRepository;
+
     @PostConstruct
-    @RequestMapping
     public String seed() {
 
         // Administrator
@@ -82,7 +100,73 @@ public class SeederController {
         Driver driver = new Driver("João Machado", 5000, 20, 3000, "D", pa);
         driversRepository.save(driver);
 
+        // Trucks
+        Truck truck = new Truck("Volvo 454", "D", 2000, 5);
+        trucksRepository.save(truck);
+
+        Truck truck2 = new Truck("Volvo 234", "D", 1000, 4);
+        trucksRepository.save(truck2);
+
+        Truck truck3 = new Truck("Volvo 324", "D", 890, 3);
+        trucksRepository.save(truck3);
+
+        // Requests
+        Request request = new Request(
+                true,
+                createDate("17/12/2016 00:00"),
+                8*60*60,
+                500,
+                500,
+                "pending",
+                fl,
+                pa,
+                client
+        );
+        requestsRepository.save(request);
+
+        List<Driver> drivers = new ArrayList<>();
+        drivers.add(driver);
+
+        // Proposals
+        Proposal proposal1 = new Proposal(
+                createDate("16/12/2016 08:00"),
+                createDate("16/12/2016 20:00"),
+                truck,
+                drivers,
+                request
+        );
+        proposalsRepository.save(proposal1);
+
+//        testTrucks();
+
         return "All seeded.";
+    }
+
+    @EventListener(ContextRefreshedEvent.class)
+    void contextRefreshedEvent() {
+        System.out.println("Context Refreshed");
+
+        System.out.println(
+                trucksRepository.findAvailableTrucks(
+                        createDate("15/12/2016 08:00"),
+                        createDate("16/12/2016 07:00"),
+                        500.0
+                )
+        );
+
+        System.out.println(
+                driversRepository.findAvailableDrivers(
+                        createDate("15/12/2016 08:00"),
+                        createDate("16/12/2016 07:00"),
+                        citiesRepository.findByName("Porto Alegre"),
+                        400
+                )
+        );
+    }
+
+
+    private LocalDateTime createDate(String dateString){
+        return LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
 }

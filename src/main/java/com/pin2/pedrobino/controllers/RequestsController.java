@@ -1,12 +1,13 @@
 package com.pin2.pedrobino.controllers;
 
-import com.google.maps.model.DistanceMatrixElement;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsRoute;
 import com.pin2.pedrobino.entities.city.CitiesRepository;
 import com.pin2.pedrobino.entities.city.StatesRepository;
 import com.pin2.pedrobino.entities.client.Client;
 import com.pin2.pedrobino.entities.request.Request;
 import com.pin2.pedrobino.entities.request.RequestsRepository;
-import com.pin2.pedrobino.support.distance.DistanceCalculator;
+import com.pin2.pedrobino.services.DirectionsService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ import javax.inject.Inject;
 public class RequestsController extends ResourceController<Request>{
 
     @Autowired
-    private DistanceCalculator distanceCalculator;
+    private DirectionsService distanceCalculator;
 
     @Autowired
     private CitiesRepository citiesRepository;
@@ -67,12 +68,14 @@ public class RequestsController extends ResourceController<Request>{
 
         try {
 
-            DistanceMatrixElement distanceMatrixElement = distanceCalculator.calculate(
+            DirectionsRoute directionsRoute = distanceCalculator.getDirections(
                     resource.getFrom(),
                     resource.getTo()
             );
 
-            resource.setEstimatedTravelDuration(distanceMatrixElement.duration.inSeconds);
+            DirectionsLeg leg = directionsRoute.legs[0];
+            resource.setEstimatedTravelDuration(leg.duration.inSeconds);
+            resource.setDistance(leg.distance.inMeters);
 
         } catch (Exception e) {
             e.printStackTrace();

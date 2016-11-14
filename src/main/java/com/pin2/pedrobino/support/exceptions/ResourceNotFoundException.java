@@ -1,4 +1,4 @@
-package com.pin2.pedrobino.exceptions;
+package com.pin2.pedrobino.support.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

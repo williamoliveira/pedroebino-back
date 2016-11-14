@@ -1,7 +1,7 @@
 package com.pin2.pedrobino.controllers;
 
 import com.pin2.pedrobino.entities.user.User;
-import com.pin2.pedrobino.exceptions.ResourceNotFoundException;
+import com.pin2.pedrobino.support.exceptions.ResourceNotFoundException;
 import com.pin2.pedrobino.support.repository.BaseRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;

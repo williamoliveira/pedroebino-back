@@ -13,6 +13,7 @@ public class City {
     private long id;
 
     @NotEmpty
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToOne(optional=false, fetch=FetchType.EAGER)

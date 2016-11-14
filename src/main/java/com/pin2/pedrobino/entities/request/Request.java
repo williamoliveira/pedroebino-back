@@ -7,7 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,14 +24,19 @@ public class Request {
     private boolean canShare;
 
     @NotNull
-    @Column(name = "prefered_date")
-    private Date preferedDate;
+    @Column(name = "preferred_date")
+    private LocalDateTime preferredDate;
 
+    // In seconds
     @Column(name = "estimated_travel_duration")
-    private double estimatedTravelDuration;
+    private long estimatedTravelDuration;
 
+    // In meters
+    private long distance;
+
+    // In Liters
     @Min(0)
-    private double volume;
+    private int volume;
 
     @NotEmpty
     private String status;
@@ -47,14 +53,59 @@ public class Request {
     @JoinColumn(name="client_id")
     private Client client;
 
+    @Size(min=3, max=3)
     @OneToMany(mappedBy="request", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     private List<Proposal> proposals;
 
-    @ManyToOne(optional=true, fetch=FetchType.EAGER)
-    @JoinColumn(name="choosen_proposal_id")
-    private Proposal choosenProposal;
+    @ManyToOne(optional=true, fetch=FetchType.LAZY)
+    @JoinColumn(name="chosen_proposal_id")
+    private Proposal chosenProposal;
 
     public Request() {
+    }
+
+    public Request(boolean canShare,
+                   LocalDateTime preferredDate,
+                   long estimatedTravelDuration,
+                   long distance,
+                   int volume,
+                   String status,
+                   City from,
+                   City to,
+                   Client client,
+                   List<Proposal> proposals,
+                   Proposal chosenProposal) {
+        this.canShare = canShare;
+        this.preferredDate = preferredDate;
+        this.estimatedTravelDuration = estimatedTravelDuration;
+        this.distance = distance;
+        this.volume = volume;
+        this.status = status;
+        this.from = from;
+        this.to = to;
+        this.client = client;
+        this.proposals = proposals;
+        this.chosenProposal = chosenProposal;
+    }
+
+    public Request(boolean canShare,
+                   LocalDateTime preferredDate,
+                   long estimatedTravelDuration,
+                   long distance,
+                   int volume,
+                   String status,
+                   City from,
+                   City to,
+                   Client client) {
+        this.canShare = canShare;
+        this.preferredDate = preferredDate;
+        this.estimatedTravelDuration = estimatedTravelDuration;
+        this.distance = distance;
+        this.volume = volume;
+        this.status = status;
+        this.from = from;
+        this.to = to;
+        this.client = client;
     }
 
     public long getId() {
@@ -73,27 +124,27 @@ public class Request {
         this.canShare = canShare;
     }
 
-    public Date getPreferedDate() {
-        return preferedDate;
+    public LocalDateTime getPreferredDate() {
+        return preferredDate;
     }
 
-    public void setPreferedDate(Date preferedDate) {
-        this.preferedDate = preferedDate;
+    public void setPreferredDate(LocalDateTime preferredDate) {
+        this.preferredDate = preferredDate;
     }
 
-    public double getEstimatedTravelDuration() {
+    public long getEstimatedTravelDuration() {
         return estimatedTravelDuration;
     }
 
-    public void setEstimatedTravelDuration(double estimatedTravelDuration) {
+    public void setEstimatedTravelDuration(long estimatedTravelDuration) {
         this.estimatedTravelDuration = estimatedTravelDuration;
     }
 
-    public double getVolume() {
+    public int getVolume() {
         return volume;
     }
 
-    public void setVolume(double volume) {
+    public void setVolume(int volume) {
         this.volume = volume;
     }
 
@@ -137,11 +188,23 @@ public class Request {
         this.proposals = proposals;
     }
 
-    public Proposal getChoosenProposal() {
-        return choosenProposal;
+    public Proposal getChosenProposal() {
+        return chosenProposal;
     }
 
-    public void setChoosenProposal(Proposal choosenProposal) {
-        this.choosenProposal = choosenProposal;
+    public void setChosenProposal(Proposal chosenProposal) {
+        this.chosenProposal = chosenProposal;
+    }
+
+    public long getDistance() {
+        return distance;
+    }
+
+    public void setDistance(long distance) {
+        this.distance = distance;
+    }
+
+    public float getEstimatedTravelDurationInHours(){
+        return estimatedTravelDuration / 3600;
     }
 }

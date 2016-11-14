@@ -2,21 +2,26 @@ package com.pin2.pedrobino.entities.driver;
 
 import com.pin2.pedrobino.entities.city.City;
 import com.pin2.pedrobino.entities.person.Person;
+import com.pin2.pedrobino.entities.request.Proposal;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "drivers")
 public class Driver extends Person {
 
-    private double experience = 0;
+    // In days
+    private long experience = 0;
 
-    @Column(name = "hourly_wage")
+    // In R$
+    @Column(name = "hourly_wage", precision = 2)
     private double hourlyWage;
 
+    // In meters
     @Column(name = "max_distance", nullable = true)
-    private double maxDistance;
+    private long maxDistance;
 
     @NotEmpty
     private String license;
@@ -28,7 +33,12 @@ public class Driver extends Person {
     public Driver() {
     }
 
-    public Driver(String name, double experience, double hourlyWage, double maxDistance, String license, City city) {
+    public Driver(String name,
+                  long experience,
+                  double hourlyWage,
+                  long maxDistance,
+                  String license,
+                  City city) {
         super(name);
         this.experience = experience;
         this.hourlyWage = hourlyWage;
@@ -41,7 +51,7 @@ public class Driver extends Person {
         return experience;
     }
 
-    public void setExperience(double experience) {
+    public void setExperience(long experience) {
         this.experience = experience;
     }
 
@@ -49,7 +59,7 @@ public class Driver extends Person {
         return hourlyWage;
     }
 
-    public void setHourlyWage(double hourlyWage) {
+    public void setHourlyWage(long hourlyWage) {
         this.hourlyWage = hourlyWage;
     }
 
@@ -57,7 +67,7 @@ public class Driver extends Person {
         return maxDistance;
     }
 
-    public void setMaxDistance(double maxDistance) {
+    public void setMaxDistance(long maxDistance) {
         this.maxDistance = maxDistance;
     }
 
@@ -76,4 +86,5 @@ public class Driver extends Person {
     public void setCity(City city) {
         this.city = city;
     }
+
 }
