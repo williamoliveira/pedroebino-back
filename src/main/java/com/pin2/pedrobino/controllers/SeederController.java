@@ -1,23 +1,22 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.entities.administrator.Administrator;
-import com.pin2.pedrobino.entities.administrator.AdministratorsRepository;
-import com.pin2.pedrobino.entities.city.CitiesRepository;
-import com.pin2.pedrobino.entities.city.City;
-import com.pin2.pedrobino.entities.city.State;
-import com.pin2.pedrobino.entities.city.StatesRepository;
-import com.pin2.pedrobino.entities.driver.Driver;
-import com.pin2.pedrobino.entities.driver.DriversRepository;
-import com.pin2.pedrobino.entities.request.Proposal;
-import com.pin2.pedrobino.entities.request.ProposalsRepository;
-import com.pin2.pedrobino.entities.request.Request;
-import com.pin2.pedrobino.entities.request.RequestsRepository;
-import com.pin2.pedrobino.entities.truck.Truck;
-import com.pin2.pedrobino.entities.truck.TrucksRepository;
-import com.pin2.pedrobino.entities.user.User;
-import com.pin2.pedrobino.entities.user.UsersRepository;
-import com.pin2.pedrobino.entities.client.Client;
-import com.pin2.pedrobino.entities.client.ClientsRepository;
+import com.pin2.pedrobino.domain.administrator.Administrator;
+import com.pin2.pedrobino.domain.administrator.AdministratorsRepository;
+import com.pin2.pedrobino.domain.city.CitiesRepository;
+import com.pin2.pedrobino.domain.city.City;
+import com.pin2.pedrobino.domain.city.State;
+import com.pin2.pedrobino.domain.city.StatesRepository;
+import com.pin2.pedrobino.domain.client.Client;
+import com.pin2.pedrobino.domain.client.ClientsRepository;
+import com.pin2.pedrobino.domain.driver.Driver;
+import com.pin2.pedrobino.domain.driver.DriversRepository;
+import com.pin2.pedrobino.domain.request.*;
+import com.pin2.pedrobino.domain.settings.Settings;
+import com.pin2.pedrobino.domain.settings.SettingsService;
+import com.pin2.pedrobino.domain.truck.Truck;
+import com.pin2.pedrobino.domain.truck.TrucksRepository;
+import com.pin2.pedrobino.domain.user.User;
+import com.pin2.pedrobino.domain.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -28,8 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @Transactional
@@ -62,8 +59,19 @@ public class SeederController {
     @Autowired
     private RequestsRepository requestsRepository;
 
+    @Autowired
+    private ProposalsGenerator proposalsGenerator;
+
+    @Autowired
+    private RequestFactory requestFactory;
+
+    @Autowired
+    private SettingsService settingsService;
+
     @PostConstruct
     public String seed() {
+
+        settingsService.saveSettings(new Settings(10));
 
         // Administrator
         Administrator admin = new Administrator("Administrator");
@@ -87,18 +95,20 @@ public class SeederController {
         statesRepository.save(rs);
         statesRepository.save(pr);
 
-        City fl = new City("Florianópolis", sc);
-        citiesRepository.save(fl);
+        City florianopolis = new City("Florianópolis", sc);
+        citiesRepository.save(florianopolis);
 
-        City cb = new City("Curitiba", pr);
-        citiesRepository.save(cb);
+        City curitiba = new City("Curitiba", pr);
+        citiesRepository.save(curitiba);
 
-        City pa = new City("Porto Alegre", rs);
-        citiesRepository.save(pa);
+        City portoAlegre = new City("Porto Alegre", rs);
+        citiesRepository.save(portoAlegre);
 
         // Drivers
-        Driver driver = new Driver("João Machado", 5000, 20, 3000, "D", pa);
+        Driver driver = new Driver("João Machado", 25 * 365, 30, 3000, "D", portoAlegre);
         driversRepository.save(driver);
+        Driver driver2 = new Driver("John Doe", 10 * 365, 20, 5000, "E", curitiba);
+        driversRepository.save(driver2);
 
         // Trucks
         Truck truck = new Truck("Volvo 454", "D", 2000, 5);
@@ -111,33 +121,16 @@ public class SeederController {
         trucksRepository.save(truck3);
 
         // Requests
-        Request request = new Request(
+        Request request = requestFactory.create(new Request(
                 true,
                 createDate("17/12/2016 00:00"),
-                8*60*60,
                 500,
-                500,
-                "pending",
-                fl,
-                pa,
+                portoAlegre,
+                florianopolis,
                 client
-        );
+        ));
+
         requestsRepository.save(request);
-
-        List<Driver> drivers = new ArrayList<>();
-        drivers.add(driver);
-
-        // Proposals
-        Proposal proposal1 = new Proposal(
-                createDate("16/12/2016 08:00"),
-                createDate("16/12/2016 20:00"),
-                truck,
-                drivers,
-                request
-        );
-        proposalsRepository.save(proposal1);
-
-//        testTrucks();
 
         return "All seeded.";
     }
@@ -146,26 +139,33 @@ public class SeederController {
     void contextRefreshedEvent() {
         System.out.println("Context Refreshed");
 
-        System.out.println(
-                trucksRepository.findAvailableTrucks(
-                        createDate("15/12/2016 08:00"),
-                        createDate("16/12/2016 07:00"),
-                        500.0
-                )
-        );
+//        System.out.println(
+//                trucksRepository.findAvailableTrucks(
+//                        createDate("15/12/2016 08:00"),
+//                        createDate("16/12/2016 07:00"),
+//                        500.0
+//                )
+//        );
 
-        System.out.println(
-                driversRepository.findAvailableDrivers(
-                        createDate("15/12/2016 08:00"),
-                        createDate("16/12/2016 07:00"),
-                        citiesRepository.findByName("Porto Alegre"),
-                        400
-                )
-        );
+//        System.out.println(
+//                driversRepository.findAvailableDrivers(
+//                        createDate("15/12/2016 08:00"),
+//                        createDate("16/12/2016 07:00"),
+//                        citiesRepository.findByName("Curitiba"),
+//                        400
+//                )
+//        );
+//
+//        Request request = requestsRepository.findAll().get(0);
+//
+//        List<Proposal> proposals = proposalsGenerator.generateProposals(request);
+//
+//        System.out.println(proposals);
+
     }
 
 
-    private LocalDateTime createDate(String dateString){
+    private LocalDateTime createDate(String dateString) {
         return LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 

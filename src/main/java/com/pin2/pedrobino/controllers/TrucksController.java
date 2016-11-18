@@ -1,7 +1,7 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.entities.truck.Truck;
-import com.pin2.pedrobino.entities.truck.TrucksRepository;
+import com.pin2.pedrobino.domain.truck.Truck;
+import com.pin2.pedrobino.domain.truck.TrucksRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 @Transactional
 @RestController
 @RequestMapping("/trucks")
-public class TrucksController extends ResourceController<Truck>{
+public class TrucksController extends ResourceController<Truck> {
 
     @Inject
     public TrucksController(TrucksRepository repository) {
@@ -24,9 +24,9 @@ public class TrucksController extends ResourceController<Truck>{
     }
 
     @Override
-    public Iterable<Truck> getMany(@QuerydslPredicate(root=Truck.class) Predicate predicate,
-                                    Pageable pageable,
-                                    @RequestParam MultiValueMap<String, String> parameters) {
+    public Iterable<Truck> getMany(@QuerydslPredicate(root = Truck.class) Predicate predicate,
+                                   Pageable pageable,
+                                   @RequestParam MultiValueMap<String, String> parameters) {
         return super.getMany(predicate, pageable, parameters);
     }
 

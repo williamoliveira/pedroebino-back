@@ -1,13 +1,10 @@
 package com.pin2.pedrobino.controllers;
 
-import com.google.maps.model.DirectionsLeg;
-import com.google.maps.model.DirectionsRoute;
-import com.pin2.pedrobino.entities.city.CitiesRepository;
-import com.pin2.pedrobino.entities.city.StatesRepository;
-import com.pin2.pedrobino.entities.client.Client;
-import com.pin2.pedrobino.entities.request.Request;
-import com.pin2.pedrobino.entities.request.RequestsRepository;
-import com.pin2.pedrobino.services.DirectionsService;
+import com.pin2.pedrobino.domain.client.Client;
+import com.pin2.pedrobino.domain.client.QClient;
+import com.pin2.pedrobino.domain.request.*;
+import com.pin2.pedrobino.domain.user.User;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +20,13 @@ import javax.inject.Inject;
 @Transactional
 @RestController
 @RequestMapping("/requests")
-public class RequestsController extends ResourceController<Request>{
+public class RequestsController extends ResourceController<Request> {
 
     @Autowired
-    private DirectionsService distanceCalculator;
+    private RequestFactory requestFactory;
 
     @Autowired
-    private CitiesRepository citiesRepository;
-
-    @Autowired
-    private StatesRepository statesRepository;
+    private ProposalsRepository proposalsRepository;
 
     @Inject
     public RequestsController(RequestsRepository repository) {
@@ -40,9 +34,18 @@ public class RequestsController extends ResourceController<Request>{
     }
 
     @Override
-    public Iterable<Request> getMany(@QuerydslPredicate(root=Request.class) Predicate predicate,
-                                    Pageable pageable,
-                                    @RequestParam MultiValueMap<String, String> parameters) {
+    public Iterable<Request> getMany(@QuerydslPredicate(root = Request.class) Predicate predicate,
+                                     Pageable pageable,
+                                     @RequestParam MultiValueMap<String, String> parameters) {
+        User user = getCurrentUser();
+
+        if (user.getPerson() instanceof Client) {
+            predicate = ExpressionUtils.allOf(
+                    predicate,
+                    QClient.client.eq((Client) user.getPerson())
+            );
+        }
+
         return super.getMany(predicate, pageable, parameters);
     }
 
@@ -56,31 +59,42 @@ public class RequestsController extends ResourceController<Request>{
     )
     @ResponseStatus(HttpStatus.OK)
     public Request create(@RequestBody Request resource) {
+        resource.setClient((Client) getCurrentUser().getPerson());
 
-        resource.setFrom(citiesRepository.findOne(resource.getFrom().getId()));
-        resource.getFrom().setState(statesRepository.findOne(resource.getFrom().getState().getId()));
-        resource.setTo(citiesRepository.findOne(resource.getTo().getId()));
-        resource.getTo().setState(statesRepository.findOne(resource.getTo().getState().getId()));
+        Request request = requestFactory.create(resource);
 
-        resource.setClient((Client)getCurrentUser().getPerson());
+        return repository.save(request);
+    }
 
-        resource.setStatus("pending");
+    @RequestMapping(
+            path = "/{requestId}/choose-proposal",
+            method = RequestMethod.POST,
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            }
+    )
+    public Request chooseProposal(@PathVariable long requestId,
+                                  @RequestBody Proposal proposal) {
+        Request request = repository.findOne(requestId);
+        proposal = proposalsRepository.findOne(proposal.getId());
 
-        try {
+        request.setChosenProposal(proposal);
+        request.setStatus(RequestStatus.DEFINED);
 
-            DirectionsRoute directionsRoute = distanceCalculator.getDirections(
-                    resource.getFrom(),
-                    resource.getTo()
-            );
+        return repository.save(request);
+    }
 
-            DirectionsLeg leg = directionsRoute.legs[0];
-            resource.setEstimatedTravelDuration(leg.duration.inSeconds);
-            resource.setDistance(leg.distance.inMeters);
+    @RequestMapping(
+            path = "/{requestId}/cancel",
+            method = RequestMethod.POST
+    )
+    public Request cancelRequest(@PathVariable long requestId) {
+        Request request = repository.findOne(requestId);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        request.setStatus(RequestStatus.CANCELED);
 
-        return repository.save(resource);
+        return repository.save(request);
     }
 }

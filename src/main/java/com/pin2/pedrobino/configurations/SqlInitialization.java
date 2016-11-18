@@ -56,7 +56,7 @@ public class SqlInitialization {
         HibernateJpaVendorAdapter hibernateAdapter = new HibernateJpaVendorAdapter();
         emFactory.setJpaVendorAdapter(hibernateAdapter);
         emFactory.setDataSource(dataSource());
-        emFactory.setPackagesToScan("com.pin2.pedrobino.entities");
+        emFactory.setPackagesToScan("com.pin2.pedrobino.domain");
 
 
         return emFactory;

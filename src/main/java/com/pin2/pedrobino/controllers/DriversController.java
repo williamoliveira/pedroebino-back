@@ -1,9 +1,9 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.entities.city.CitiesRepository;
-import com.pin2.pedrobino.entities.city.StatesRepository;
-import com.pin2.pedrobino.entities.driver.Driver;
-import com.pin2.pedrobino.entities.driver.DriversRepository;
+import com.pin2.pedrobino.domain.city.CitiesRepository;
+import com.pin2.pedrobino.domain.city.StatesRepository;
+import com.pin2.pedrobino.domain.driver.Driver;
+import com.pin2.pedrobino.domain.driver.DriversRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
 @Transactional
 @RestController
 @RequestMapping("/drivers")
-public class DriversController extends ResourceController<Driver>{
+public class DriversController extends ResourceController<Driver> {
 
     @Autowired
     private CitiesRepository citiesRepository;
@@ -34,7 +34,7 @@ public class DriversController extends ResourceController<Driver>{
     }
 
     @Override
-    public Iterable<Driver> getMany(@QuerydslPredicate(root=Driver.class) Predicate predicate,
+    public Iterable<Driver> getMany(@QuerydslPredicate(root = Driver.class) Predicate predicate,
                                     Pageable pageable,
                                     @RequestParam MultiValueMap<String, String> parameters) {
         return super.getMany(predicate, pageable, parameters);

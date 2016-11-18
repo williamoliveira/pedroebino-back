@@ -1,13 +1,15 @@
 package com.pin2.pedrobino.support.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pin2.pedrobino.entities.administrator.Administrator;
-import com.pin2.pedrobino.entities.user.User;
-import com.pin2.pedrobino.entities.client.Client;
+import com.pin2.pedrobino.domain.administrator.Administrator;
+import com.pin2.pedrobino.domain.client.Client;
+import com.pin2.pedrobino.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class AuthUser extends User implements UserDetails {
@@ -23,15 +25,14 @@ public class AuthUser extends User implements UserDetails {
         return getRoles().stream().map(AuthRole::new).collect(Collectors.toSet());
     }
 
-    public List<String> getRoles(){
+    public List<String> getRoles() {
         List<String> roles = new ArrayList<>();
 
         roles.add("USER");
 
-        if(getPerson() instanceof Administrator){
+        if (getPerson() instanceof Administrator) {
             roles.add("ADMIN");
-        }
-        else if(getPerson() instanceof Client){
+        } else if (getPerson() instanceof Client) {
             roles.add("CLIENT");
         }
 

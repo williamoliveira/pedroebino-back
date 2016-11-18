@@ -1,7 +1,7 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.entities.city.State;
-import com.pin2.pedrobino.entities.city.StatesRepository;
+import com.pin2.pedrobino.domain.city.State;
+import com.pin2.pedrobino.domain.city.StatesRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 @Transactional
 @RestController
 @RequestMapping("/states")
-public class StatesController extends ResourceController<State>{
+public class StatesController extends ResourceController<State> {
 
     @Inject
     public StatesController(StatesRepository repository) {
@@ -24,7 +24,7 @@ public class StatesController extends ResourceController<State>{
     }
 
     @Override
-    public Iterable<State> getMany(@QuerydslPredicate(root=State.class) Predicate predicate,
+    public Iterable<State> getMany(@QuerydslPredicate(root = State.class) Predicate predicate,
                                    Pageable pageable,
                                    @RequestParam MultiValueMap<String, String> parameters) {
         return super.getMany(predicate, pageable, parameters);

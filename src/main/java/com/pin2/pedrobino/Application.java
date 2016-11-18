@@ -49,8 +49,4 @@ public class Application {
         return new OpenEntityManagerInViewFilter();
     }
 
-//    @Bean
-//    public ApiOriginsFilter apiOriginFilter() {
-//        return new ApiOriginsFilter();
-//    }
 }

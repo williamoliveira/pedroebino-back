@@ -33,13 +33,13 @@ public class ApiOriginsFilter extends OncePerRequestFilter {
             response.addHeader("Access-Control-Max-Age", MAX_PRE_FLIGHT_CACHE_SECONDS);
 
             response.setStatus(HttpServletResponse.SC_OK);
-        }
-        else{
+        } else {
             filterChain.doFilter(request, response);
         }
 
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class GoogleMapsConfiguration {
 
     @Bean
-    public GeoApiContext getGeoApiContext(){
+    public GeoApiContext getGeoApiContext() {
         return new GeoApiContext().setApiKey("AIzaSyAdy24rqWFRtchtsjD2xUVV11Txt75wL-g");
     }
 }

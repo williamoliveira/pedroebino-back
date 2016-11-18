@@ -1,6 +1,6 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.entities.user.User;
+import com.pin2.pedrobino.domain.user.User;
 import com.pin2.pedrobino.support.exceptions.ResourceNotFoundException;
 import com.pin2.pedrobino.support.repository.BaseRepository;
 import com.querydsl.core.types.Predicate;
@@ -37,7 +37,7 @@ abstract public class ResourceController<T> {
     public T getById(@PathVariable long id) {
         T resource = repository.findOne(id);
 
-        if(resource == null) throw new ResourceNotFoundException();
+        if (resource == null) throw new ResourceNotFoundException();
 
         return resource;
     }
@@ -67,7 +67,7 @@ abstract public class ResourceController<T> {
         return repository.save(resource);
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable long id) {
         repository.delete(id);
     }
@@ -78,8 +78,8 @@ abstract public class ResourceController<T> {
 
     }
 
-    protected User getCurrentUser(){
-        return (User)((OAuth2Authentication) SecurityContextHolder
+    protected User getCurrentUser() {
+        return (User) ((OAuth2Authentication) SecurityContextHolder
                 .getContext().getAuthentication())
                 .getPrincipal();
     }
