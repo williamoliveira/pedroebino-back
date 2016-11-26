@@ -2,7 +2,12 @@ package com.pin2.pedrobino.controllers;
 
 import com.pin2.pedrobino.domain.client.Client;
 import com.pin2.pedrobino.domain.client.QClient;
-import com.pin2.pedrobino.domain.request.*;
+import com.pin2.pedrobino.domain.proposal.Proposal;
+import com.pin2.pedrobino.domain.proposal.ProposalsRepository;
+import com.pin2.pedrobino.domain.request.Request;
+import com.pin2.pedrobino.domain.request.RequestFactory;
+import com.pin2.pedrobino.domain.request.RequestStatus;
+import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.user.User;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
@@ -16,6 +21,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Transactional
 @RestController
@@ -81,7 +89,6 @@ public class RequestsController extends ResourceController<Request> {
         proposal = proposalsRepository.findOne(proposal.getId());
 
         request.setChosenProposal(proposal);
-        request.setStatus(RequestStatus.DEFINED);
 
         return repository.save(request);
     }
@@ -93,7 +100,7 @@ public class RequestsController extends ResourceController<Request> {
     public Request cancelRequest(@PathVariable long requestId) {
         Request request = repository.findOne(requestId);
 
-        request.setStatus(RequestStatus.CANCELED);
+        request.cancel();
 
         return repository.save(request);
     }

@@ -1,7 +1,7 @@
 package com.pin2.pedrobino.domain.truck;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pin2.pedrobino.domain.request.Proposal;
+import com.pin2.pedrobino.domain.proposal.Proposal;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -33,7 +33,7 @@ public class Truck {
     private double costPerKm;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "truck", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "truck", fetch = FetchType.LAZY)
     private List<Proposal> proposals;
 
     public Truck() {

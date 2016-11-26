@@ -14,11 +14,15 @@ public class Settings {
     @Column(name = "profit_margin")
     private double profitMargin;
 
+    @Column(name = "shared_discount")
+    private double sharedDiscount;
+
     public Settings() {
     }
 
-    public Settings(double profitMargin) {
+    public Settings(double profitMargin, double sharedDiscount) {
         this.profitMargin = profitMargin;
+        this.sharedDiscount = sharedDiscount;
     }
 
     public long getId() {
@@ -35,5 +39,13 @@ public class Settings {
 
     public void setProfitMargin(double profitMargin) {
         this.profitMargin = profitMargin;
+    }
+
+    public double getSharedDiscount() {
+        return sharedDiscount;
+    }
+
+    public void setSharedDiscount(double sharedDiscount) {
+        this.sharedDiscount = sharedDiscount;
     }
 }

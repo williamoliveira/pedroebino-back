@@ -1,13 +1,18 @@
-package com.pin2.pedrobino.domain.request;
+package com.pin2.pedrobino.domain.proposal;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pin2.pedrobino.domain.driver.Driver;
+import com.pin2.pedrobino.domain.request.Request;
 import com.pin2.pedrobino.domain.truck.Truck;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,43 +25,46 @@ public class Proposal {
 
     @NotNull
     @Column(name = "leaves_at")
-    private LocalDateTime leavesAt;
+    private Date leavesAt;
 
     @NotNull
     @Column(name = "arrives_at")
-    private LocalDateTime arrivesAt;
+    private Date arrivesAt;
 
     private double value;
 
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "truck_id", nullable = false)
     private Truck truck;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "proposals_drivers",
             joinColumns = {@JoinColumn(name = "proposal_id")},
             inverseJoinColumns = {@JoinColumn(name = "driver_id")}
     )
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Driver> drivers;
 
     @JsonIgnore
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id", nullable = false)
-    private Request request;
+    @ManyToMany(mappedBy = "proposals", fetch = FetchType.EAGER)
+    private List<Request> requests;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "chosenProposal", fetch = FetchType.LAZY)
+    private List<Request> definedRequests;
 
     public Proposal() {
     }
 
-    public Proposal(LocalDateTime leavesAt,
-                    LocalDateTime arrivesAt,
-                    Truck truck,
-                    List<Driver> drivers,
-                    Request request) {
+    public Proposal(Date leavesAt, Date arrivesAt, double value, Truck truck, List<Driver> drivers, List<Request> requests) {
         this.leavesAt = leavesAt;
         this.arrivesAt = arrivesAt;
+        this.value = value;
         this.truck = truck;
         this.drivers = drivers;
-        this.request = request;
+        this.requests = requests;
     }
 
     public long getId() {
@@ -67,21 +75,12 @@ public class Proposal {
         this.id = id;
     }
 
-    public LocalDateTime getLeavesAt() {
+    public Date getLeavesAt() {
         return leavesAt;
     }
 
-    public void setLeavesAt(LocalDateTime leavesAt) {
+    public void setLeavesAt(Date leavesAt) {
         this.leavesAt = leavesAt;
-    }
-
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public void setRequest(Request request) {
-        this.request = request;
     }
 
     public Truck getTruck() {
@@ -100,11 +99,11 @@ public class Proposal {
         this.drivers = drivers;
     }
 
-    public LocalDateTime getArrivesAt() {
+    public Date getArrivesAt() {
         return arrivesAt;
     }
 
-    public void setArrivesAt(LocalDateTime arrivesAt) {
+    public void setArrivesAt(Date arrivesAt) {
         this.arrivesAt = arrivesAt;
     }
 
@@ -116,5 +115,27 @@ public class Proposal {
         this.value = value;
     }
 
+    public List<Request> getRequests() {
+        return requests;
+    }
 
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public void addRequest(Request request){
+        if(getRequests() == null){
+            setRequests(new ArrayList<>());
+        }
+
+        getRequests().add(request);
+    }
+
+    public List<Request> getDefinedRequests() {
+        return definedRequests;
+    }
+
+    public void setDefinedRequests(List<Request> definedRequests) {
+        this.definedRequests = definedRequests;
+    }
 }

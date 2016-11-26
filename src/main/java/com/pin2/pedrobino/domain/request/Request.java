@@ -1,17 +1,28 @@
 package com.pin2.pedrobino.domain.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.pin2.pedrobino.domain.city.City;
 import com.pin2.pedrobino.domain.client.Client;
+import com.pin2.pedrobino.domain.proposal.Proposal;
+import org.hibernate.annotations.Type;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "requests")
+@EntityScan(basePackageClasses = { Jsr310JpaConverters.class })
 public class Request {
 
     @Id
@@ -24,7 +35,7 @@ public class Request {
 
     @NotNull
     @Column(name = "preferred_date")
-    private LocalDateTime preferredDate;
+    private Date preferredDate;
 
     // In seconds
     @Column(name = "estimated_travel_duration")
@@ -49,16 +60,20 @@ public class Request {
     @JoinColumn(name = "to_city_id")
     private City to;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
     @Size(max = 3)
-    @OneToMany(mappedBy = "request", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OrderBy("leavesAt ASC")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "requests_proposals",
+            joinColumns = {@JoinColumn(name = "request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "proposal_id")}
+    )
     private List<Proposal> proposals;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chosen_proposal_id")
     private Proposal chosenProposal;
 
@@ -69,7 +84,7 @@ public class Request {
     }
 
     public Request(boolean canShare,
-                   LocalDateTime preferredDate,
+                   Date preferredDate,
                    int volume,
                    City from,
                    City to,
@@ -80,6 +95,10 @@ public class Request {
         this.from = from;
         this.to = to;
         this.client = client;
+    }
+
+    public void cancel(){
+        this.setStatus(RequestStatus.CANCELED);
     }
 
     public long getId() {
@@ -98,11 +117,11 @@ public class Request {
         this.canShare = canShare;
     }
 
-    public LocalDateTime getPreferredDate() {
+    public Date getPreferredDate() {
         return preferredDate;
     }
 
-    public void setPreferredDate(LocalDateTime preferredDate) {
+    public void setPreferredDate(Date preferredDate) {
         this.preferredDate = preferredDate;
     }
 
@@ -168,6 +187,7 @@ public class Request {
 
     public void setChosenProposal(Proposal chosenProposal) {
         this.chosenProposal = chosenProposal;
+        this.setStatus(RequestStatus.DEFINED);
     }
 
     public long getDistance() {

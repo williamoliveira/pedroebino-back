@@ -51,13 +51,14 @@ public class SqlInitialization {
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.databaseZone", "UTC");
         emFactory.getJpaPropertyMap().put("hibernate.show_sql", "true");
 
-        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
+        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
+//        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
+//        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "update");
 
         HibernateJpaVendorAdapter hibernateAdapter = new HibernateJpaVendorAdapter();
         emFactory.setJpaVendorAdapter(hibernateAdapter);
         emFactory.setDataSource(dataSource());
         emFactory.setPackagesToScan("com.pin2.pedrobino.domain");
-
 
         return emFactory;
     }

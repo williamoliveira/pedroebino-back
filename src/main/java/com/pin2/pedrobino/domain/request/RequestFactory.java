@@ -2,6 +2,8 @@ package com.pin2.pedrobino.domain.request;
 
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsRoute;
+import com.pin2.pedrobino.domain.proposal.Proposal;
+import com.pin2.pedrobino.domain.proposal.ProposalsGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,10 @@ public class RequestFactory {
     private ProposalsGenerator proposalsGenerator;
 
     public Request create(Request request) {
+
+        request.setStatus(RequestStatus.PENDING);
+
         try {
-
-            request.setStatus(RequestStatus.PENDING);
-
             DirectionsRoute directionsRoute = distanceCalculator.getDirections(
                     request.getFrom(),
                     request.getTo()
@@ -33,15 +35,20 @@ public class RequestFactory {
 
             request.setOverviewPolyline(directionsRoute.overviewPolyline.getEncodedPath());
 
-            List<Proposal> proposals = proposalsGenerator.generateProposals(request);
-
-            if (proposals.size() > 0) {
-                request.setProposals(proposals);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
+
+            // TODO for testing
+            request.setEstimatedTravelDuration(5);
+            request.setDistance(500000);
         }
+
+        List<Proposal> proposals = proposalsGenerator.generateProposals(request);
+
+        if (proposals.size() > 0) {
+            request.setProposals(proposals);
+        }
+
 
         return request;
     }

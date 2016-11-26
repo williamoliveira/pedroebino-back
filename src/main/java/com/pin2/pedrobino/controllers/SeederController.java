@@ -10,7 +10,12 @@ import com.pin2.pedrobino.domain.client.Client;
 import com.pin2.pedrobino.domain.client.ClientsRepository;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.driver.DriversRepository;
-import com.pin2.pedrobino.domain.request.*;
+import com.pin2.pedrobino.domain.proposal.Proposal;
+import com.pin2.pedrobino.domain.proposal.ProposalsGenerator;
+import com.pin2.pedrobino.domain.proposal.ProposalsRepository;
+import com.pin2.pedrobino.domain.request.Request;
+import com.pin2.pedrobino.domain.request.RequestFactory;
+import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.settings.Settings;
 import com.pin2.pedrobino.domain.settings.SettingsService;
 import com.pin2.pedrobino.domain.truck.Truck;
@@ -25,8 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @Transactional
@@ -71,7 +77,7 @@ public class SeederController {
     @PostConstruct
     public String seed() {
 
-        settingsService.saveSettings(new Settings(10));
+        settingsService.saveSettings(new Settings(10, 15));
 
         // Administrator
         Administrator admin = new Administrator("Administrator");
@@ -111,27 +117,43 @@ public class SeederController {
         driversRepository.save(driver2);
 
         // Trucks
-        Truck truck = new Truck("Volvo 454", "D", 2000, 5);
+        Truck truck = new Truck("Volvo 454", "D", 2000, 0.8);
         trucksRepository.save(truck);
 
-        Truck truck2 = new Truck("Volvo 234", "D", 1000, 4);
+        Truck truck2 = new Truck("Volvo 234", "D", 1000, 0.6);
         trucksRepository.save(truck2);
 
-        Truck truck3 = new Truck("Volvo 324", "D", 890, 3);
+        Truck truck3 = new Truck("Volvo 324", "D", 890, 0.5);
         trucksRepository.save(truck3);
+
 
         // Requests
         Request request = requestFactory.create(new Request(
                 true,
                 createDate("17/12/2016 00:00"),
-                500,
+                300,
                 portoAlegre,
                 florianopolis,
                 client
         ));
 
-        requestsRepository.save(request);
+        if (request != null && request.getProposals() != null)
+            request.setChosenProposal(request.getProposals().get(1));
 
+        requestsRepository.save(request);
+//
+//        request = requestFactory.create(new Request(
+//                true,
+//                createDate("17/12/2016 00:00"),
+//                100,
+//                portoAlegre,
+//                florianopolis,
+//                client
+//        ));
+//
+//        System.out.println(request.getProposals());
+
+        System.out.println("All seeded");
         return "All seeded.";
     }
 
@@ -141,20 +163,40 @@ public class SeederController {
 
 //        System.out.println(
 //                trucksRepository.findAvailableTrucks(
-//                        createDate("15/12/2016 08:00"),
-//                        createDate("16/12/2016 07:00"),
-//                        500.0
+//                        createDate("17/12/2016 01:00"),
+//                        createDate("17/12/2016 07:00"),
+//                        100.0
+//                )
+//        );
+//
+//        System.out.println(
+//                trucksRepository.findAvailableTrucks(
+//                        createDate("20/12/2016 00:00"),
+//                        createDate("20/12/2016 07:00"),
+//                        100.0
 //                )
 //        );
 
+//        System.out.println("0");
 //        System.out.println(
 //                driversRepository.findAvailableDrivers(
-//                        createDate("15/12/2016 08:00"),
-//                        createDate("16/12/2016 07:00"),
-//                        citiesRepository.findByName("Curitiba"),
+//                        createDate("17/12/2016 00:00"),
+//                        createDate("17/12/2016 07:00"),
+//                        citiesRepository.findByName("Porto Alegre"),
 //                        400
 //                )
 //        );
+//
+//        System.out.println("1");
+//        System.out.println(
+//                driversRepository.findAvailableDrivers(
+//                        createDate("20/12/2016 00:00"),
+//                        createDate("20/12/2016 07:00"),
+//                        citiesRepository.findByName("Porto Alegre"),
+//                        400
+//                )
+//        );
+
 //
 //        Request request = requestsRepository.findAll().get(0);
 //
@@ -162,11 +204,35 @@ public class SeederController {
 //
 //        System.out.println(proposals);
 
+        Proposal proposal = proposalsRepository.findBestShareableProposal(
+                createDate("17/12/2016 00:00"),
+                citiesRepository.findByName("Porto Alegre"),
+                citiesRepository.findByName("Florianópolis"),
+                100
+        );
+
+        System.out.println("Proposals 1:");
+        System.out.println(proposal);
+
+        proposal = proposalsRepository.findBestShareableProposal(
+                createDate("20/12/2016 00:00"),
+                citiesRepository.findByName("Porto Alegre"),
+                citiesRepository.findByName("Florianópolis"),
+                100
+        );
+
+        System.out.println("Proposals 0:");
+        System.out.println(proposal);
     }
 
+    private Date createDate(String dateString) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-    private LocalDateTime createDate(String dateString) {
-        return LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        return  null;
     }
 
 }

@@ -12,7 +12,7 @@ public interface TrucksRepository extends BaseRepository<Truck>, TrucksRepositor
 //            "RIGHT JOIN p.truck t " +
 //            "WHERE p.startsAt > :startsAt OR p.endsAt < :endsAt")
 //    public List<Truck> getAvailableTrucks(
-//            @Param("startsAt") LocalDateTime startsAt,
-//            @Param("endsAt") LocalDateTime endsAt
+//            @Param("startsAt") ZonedDateTime startsAt,
+//            @Param("endsAt") ZonedDateTime endsAt
 //    );
 }
