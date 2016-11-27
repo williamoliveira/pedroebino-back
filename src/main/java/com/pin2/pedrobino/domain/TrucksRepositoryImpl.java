@@ -1,12 +1,10 @@
-package com.pin2.pedrobino.domain.truck;
+package com.pin2.pedrobino.domain;
 
 import com.pin2.pedrobino.domain.proposal.QProposal;
 import com.pin2.pedrobino.domain.request.QRequest;
-import com.pin2.pedrobino.domain.request.RequestStatus;
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +19,6 @@ public class TrucksRepositoryImpl extends QueryDslRepositorySupport implements T
         QTruck truck = QTruck.truck;
         QRequest request = QRequest.request;
         QProposal proposal = QProposal.proposal;
-        QProposal chosenProposal = new QProposal("choosenProposal");
 
         return from(request)
                 .rightJoin(request.chosenProposal, proposal) // right join so we get proposals without requests

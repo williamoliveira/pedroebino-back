@@ -1,7 +1,7 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.domain.truck.Truck;
-import com.pin2.pedrobino.domain.truck.TrucksRepository;
+import com.pin2.pedrobino.domain.Truck;
+import com.pin2.pedrobino.domain.TrucksRepository;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;

@@ -1,6 +1,5 @@
-package com.pin2.pedrobino.domain.truck;
+package com.pin2.pedrobino.domain;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 

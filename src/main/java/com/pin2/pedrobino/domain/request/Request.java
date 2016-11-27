@@ -1,13 +1,9 @@
 package com.pin2.pedrobino.domain.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.pin2.pedrobino.domain.city.City;
 import com.pin2.pedrobino.domain.client.Client;
 import com.pin2.pedrobino.domain.proposal.Proposal;
-import org.hibernate.annotations.Type;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
@@ -15,14 +11,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "requests")
-@EntityScan(basePackageClasses = { Jsr310JpaConverters.class })
+@EntityScan(basePackageClasses = {Jsr310JpaConverters.class})
 public class Request {
 
     @Id
@@ -50,7 +44,7 @@ public class Request {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private RequestStatus status;
+    private RequestStatus status = RequestStatus.PENDING;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "from_city_id")
@@ -71,6 +65,7 @@ public class Request {
             joinColumns = {@JoinColumn(name = "request_id")},
             inverseJoinColumns = {@JoinColumn(name = "proposal_id")}
     )
+    @OrderBy("leavesAt")
     private List<Proposal> proposals;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -97,7 +92,7 @@ public class Request {
         this.client = client;
     }
 
-    public void cancel(){
+    public void cancel() {
         this.setStatus(RequestStatus.CANCELED);
     }
 

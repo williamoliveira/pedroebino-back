@@ -8,7 +8,7 @@ user: postgres
 password: postgres
 
 # the JDBC URL
-url: jdbc:postgresql://127.0.0.1:5432/pedrobino
+url: jdbc:postgresql://127.0.0.1:5432/pedrobino-tests
 
 # any properties specific to your JDBC driver:
 properties:
@@ -35,8 +35,6 @@ checkConnectionHealthWhenIdleFor: 10
 # the maximum lifetime of an idle connection
 closeConnectionIfIdleFor: 60
 
-# update, drop-create or create
 hibernateHbm2ddlAuto: update
 
-# logs sql
 hibernateShowSql: false

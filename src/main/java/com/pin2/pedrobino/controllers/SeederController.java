@@ -1,5 +1,7 @@
 package com.pin2.pedrobino.controllers;
 
+import com.pin2.pedrobino.domain.Truck;
+import com.pin2.pedrobino.domain.TrucksRepository;
 import com.pin2.pedrobino.domain.administrator.Administrator;
 import com.pin2.pedrobino.domain.administrator.AdministratorsRepository;
 import com.pin2.pedrobino.domain.city.CitiesRepository;
@@ -11,32 +13,31 @@ import com.pin2.pedrobino.domain.client.ClientsRepository;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.driver.DriversRepository;
 import com.pin2.pedrobino.domain.proposal.Proposal;
-import com.pin2.pedrobino.domain.proposal.ProposalsGenerator;
+import com.pin2.pedrobino.domain.proposal.ProposalsCalculator;
 import com.pin2.pedrobino.domain.proposal.ProposalsRepository;
 import com.pin2.pedrobino.domain.request.Request;
 import com.pin2.pedrobino.domain.request.RequestFactory;
 import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.settings.Settings;
 import com.pin2.pedrobino.domain.settings.SettingsService;
-import com.pin2.pedrobino.domain.truck.Truck;
-import com.pin2.pedrobino.domain.truck.TrucksRepository;
 import com.pin2.pedrobino.domain.user.User;
 import com.pin2.pedrobino.domain.user.UsersRepository;
+import com.pin2.pedrobino.support.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.inject.Inject;
 
 @RestController
 @Transactional
 public class SeederController {
+
+    @Inject
+    private Environment springEnvironment;
 
     @Autowired
     private UsersRepository usersRepository;
@@ -66,7 +67,7 @@ public class SeederController {
     private RequestsRepository requestsRepository;
 
     @Autowired
-    private ProposalsGenerator proposalsGenerator;
+    private ProposalsCalculator proposalsCalculator;
 
     @Autowired
     private RequestFactory requestFactory;
@@ -75,7 +76,17 @@ public class SeederController {
     private SettingsService settingsService;
 
     @PostConstruct
-    public String seed() {
+    public void seed() {
+
+        String environmentName = springEnvironment.getActiveProfiles().length > 0
+                ? springEnvironment.getActiveProfiles()[0]
+                : "local";
+
+        // Do not seed for test, tests have its own seeds
+        if (environmentName.equalsIgnoreCase("test")) return;
+
+        // Already seeded
+        if (settingsService.getSettings() != null) return;
 
         settingsService.saveSettings(new Settings(10, 15));
 
@@ -130,7 +141,7 @@ public class SeederController {
         // Requests
         Request request = requestFactory.create(new Request(
                 true,
-                createDate("17/12/2016 00:00"),
+                DateUtil.createDate("17/12/2016 00:00"),
                 300,
                 portoAlegre,
                 florianopolis,
@@ -141,6 +152,7 @@ public class SeederController {
             request.setChosenProposal(request.getProposals().get(1));
 
         requestsRepository.save(request);
+
 //
 //        request = requestFactory.create(new Request(
 //                true,
@@ -154,10 +166,9 @@ public class SeederController {
 //        System.out.println(request.getProposals());
 
         System.out.println("All seeded");
-        return "All seeded.";
     }
 
-    @EventListener(ContextRefreshedEvent.class)
+    //    @EventListener(ContextRefreshedEvent.class)
     void contextRefreshedEvent() {
         System.out.println("Context Refreshed");
 
@@ -200,12 +211,12 @@ public class SeederController {
 //
 //        Request request = requestsRepository.findAll().get(0);
 //
-//        List<Proposal> proposals = proposalsGenerator.generateProposals(request);
+//        List<Proposal> proposals = proposalsCalculator.calculateProposals(request);
 //
 //        System.out.println(proposals);
 
         Proposal proposal = proposalsRepository.findBestShareableProposal(
-                createDate("17/12/2016 00:00"),
+                DateUtil.createDate("17/12/2016 00:00"),
                 citiesRepository.findByName("Porto Alegre"),
                 citiesRepository.findByName("Florianópolis"),
                 100
@@ -215,7 +226,7 @@ public class SeederController {
         System.out.println(proposal);
 
         proposal = proposalsRepository.findBestShareableProposal(
-                createDate("20/12/2016 00:00"),
+                DateUtil.createDate("20/12/2016 00:00"),
                 citiesRepository.findByName("Porto Alegre"),
                 citiesRepository.findByName("Florianópolis"),
                 100
@@ -223,16 +234,6 @@ public class SeederController {
 
         System.out.println("Proposals 0:");
         System.out.println(proposal);
-    }
-
-    private Date createDate(String dateString) {
-        try {
-            return new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return  null;
     }
 
 }

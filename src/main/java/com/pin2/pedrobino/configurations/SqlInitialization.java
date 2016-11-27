@@ -49,9 +49,10 @@ public class SqlInitialization {
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.autoRegisterUserTypes", "true");
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.javaZone", "UTC");
         emFactory.getJpaPropertyMap().put("hibernate.jadira.usertype.databaseZone", "UTC");
-        emFactory.getJpaPropertyMap().put("hibernate.show_sql", "true");
+        emFactory.getJpaPropertyMap().put("hibernate.show_sql", config.getHibernateShowSql());
 
-        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
+        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", config.getHibernateHbm2ddlAuto());
+//        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
 //        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
 //        emFactory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "update");
 
@@ -63,7 +64,7 @@ public class SqlInitialization {
         return emFactory;
     }
 
-    @Bean(destroyMethod = "close")
+    @Bean(name = "dataSource", destroyMethod = "close")
     public DataSource dataSource() {
         this.pool = new org.apache.tomcat.jdbc.pool.DataSource();
         this.pool.setDriverClassName(config.getDriverClass());
@@ -75,7 +76,6 @@ public class SqlInitialization {
         this.pool.setValidationQuery(config.getValidationQuery());
         return this.pool;
     }
-
 
     @PreDestroy
     public void close() {

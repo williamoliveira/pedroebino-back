@@ -2,7 +2,6 @@ package com.pin2.pedrobino.domain.proposal;
 
 import com.pin2.pedrobino.domain.city.City;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 public interface ProposalsRepositoryCustom {

@@ -1,14 +1,12 @@
 package com.pin2.pedrobino.domain.driver;
 
+import com.pin2.pedrobino.domain.Truck;
 import com.pin2.pedrobino.domain.city.City;
 import com.pin2.pedrobino.domain.proposal.QProposal;
 import com.pin2.pedrobino.domain.request.QRequest;
-import com.pin2.pedrobino.domain.request.RequestStatus;
-import com.pin2.pedrobino.domain.truck.Truck;
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 

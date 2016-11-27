@@ -3,7 +3,7 @@ package com.pin2.pedrobino.domain.request;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsRoute;
 import com.pin2.pedrobino.domain.proposal.Proposal;
-import com.pin2.pedrobino.domain.proposal.ProposalsGenerator;
+import com.pin2.pedrobino.domain.proposal.ProposalsCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class RequestFactory {
     private DirectionsService distanceCalculator;
 
     @Autowired
-    private ProposalsGenerator proposalsGenerator;
+    private ProposalsCalculator proposalsCalculator;
 
     public Request create(Request request) {
 
@@ -43,7 +43,7 @@ public class RequestFactory {
             request.setDistance(500000);
         }
 
-        List<Proposal> proposals = proposalsGenerator.generateProposals(request);
+        List<Proposal> proposals = proposalsCalculator.calculateProposals(request);
 
         if (proposals.size() > 0) {
             request.setProposals(proposals);

@@ -28,6 +28,8 @@
         <jackson-version>2.8.3</jackson-version>
         <fest.version>2.0M10</fest.version>
         <beanutils.version>1.9.3</beanutils.version>
+        <dbunit.version>2.5.0</dbunit.version>
+        <spring-test-dbunit.version>1.2.1</spring-test-dbunit.version>
     </properties>
 
     <profiles>
@@ -82,6 +84,17 @@
             <groupId>com.google.maps</groupId>
             <artifactId>google-maps-services</artifactId>
             <version>0.1.16</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.springtestdbunit</groupId>
+            <artifactId>spring-test-dbunit</artifactId>
+            <version>${spring-test-dbunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
         </dependency>
 
         <!-- Jackson -->

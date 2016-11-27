@@ -17,7 +17,7 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
 
     public ObjectMapperContextResolver() {
         mapper = new ObjectMapper();
-        JavaTimeModule javaTimeModule=new JavaTimeModule();
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
         // Hack time module to allow 'Z' at the end of string (i.e. javascript json's)
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
         mapper.registerModule(javaTimeModule);

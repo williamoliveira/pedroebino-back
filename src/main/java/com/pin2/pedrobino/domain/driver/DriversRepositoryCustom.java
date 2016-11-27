@@ -2,7 +2,6 @@ package com.pin2.pedrobino.domain.driver;
 
 import com.pin2.pedrobino.domain.city.City;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 

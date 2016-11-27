@@ -45,6 +45,12 @@ public class ApplicationConfiguration {
     @NotNull
     private Integer closeConnectionIfIdleFor = 60;
 
+    @NotNull
+    private String hibernateHbm2ddlAuto;
+
+    @NotNull
+    private String hibernateShowSql;
+
     public String getDriverClass() {
         return driverClass;
     }
@@ -93,4 +99,19 @@ public class ApplicationConfiguration {
         return closeConnectionIfIdleFor;
     }
 
+    public String getHibernateHbm2ddlAuto() {
+        return hibernateHbm2ddlAuto;
+    }
+
+    public void setHibernateHbm2ddlAuto(String hibernateHbm2ddlAuto) {
+        this.hibernateHbm2ddlAuto = hibernateHbm2ddlAuto;
+    }
+
+    public String getHibernateShowSql() {
+        return hibernateShowSql;
+    }
+
+    public void setHibernateShowSql(String hibernateShowSql) {
+        this.hibernateShowSql = hibernateShowSql;
+    }
 }

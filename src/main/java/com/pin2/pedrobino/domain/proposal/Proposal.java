@@ -2,15 +2,14 @@ package com.pin2.pedrobino.domain.proposal;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pin2.pedrobino.domain.Truck;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.request.Request;
-import com.pin2.pedrobino.domain.truck.Truck;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,8 +122,8 @@ public class Proposal {
         this.requests = requests;
     }
 
-    public void addRequest(Request request){
-        if(getRequests() == null){
+    public void addRequest(Request request) {
+        if (getRequests() == null) {
             setRequests(new ArrayList<>());
         }
 

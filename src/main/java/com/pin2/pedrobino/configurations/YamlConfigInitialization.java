@@ -13,13 +13,15 @@ import java.io.InputStream;
 @Configuration
 public class YamlConfigInitialization {
     private static final Logger LOGGER = LoggerFactory.getLogger(YamlConfigInitialization.class);
+
     @Inject
     private Environment springEnvironment;
 
     @Bean
     public ApplicationConfiguration getApplicationConfig() throws IOException {
-        String environmentName = springEnvironment.getActiveProfiles().length > 0 ? springEnvironment.getActiveProfiles()[0] : "local";
-        LOGGER.info("Loading environment: " + environmentName);
+        String environmentName = springEnvironment.getActiveProfiles().length > 0
+                ? springEnvironment.getActiveProfiles()[0]
+                : "local";
 
         try (InputStream inputStream = YamlConfigInitialization.class.getResourceAsStream("/config/" + environmentName + ".yml")) {
             if (inputStream == null) {

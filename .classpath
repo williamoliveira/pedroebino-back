@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="target/generated-sources/java"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.springframework.boot:spring-boot-starter:1.4.1.RELEASE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.springframework.boot:spring-boot:1.4.1.RELEASE"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.springframework.boot:spring-boot-autoconfigure:1.4.1.RELEASE"/>
@@ -89,6 +90,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.squareup.okhttp:okhttp:2.7.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.squareup.okio:okio:1.6.0"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: joda-time:joda-time:2.9.4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.github.springtestdbunit:spring-test-dbunit:1.2.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.dbunit:dbunit:2.5.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-collections:commons-collections:3.2.2"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.fasterxml.jackson.core:jackson-core:2.8.3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.3"/>
@@ -145,6 +149,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.easytesting:fest-util:1.2.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-inmemory:2.7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-beanutils:commons-beanutils:1.9.3"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: commons-collections:commons-collections:3.2.2"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

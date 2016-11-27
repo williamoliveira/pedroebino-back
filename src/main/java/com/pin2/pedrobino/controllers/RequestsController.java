@@ -6,7 +6,6 @@ import com.pin2.pedrobino.domain.proposal.Proposal;
 import com.pin2.pedrobino.domain.proposal.ProposalsRepository;
 import com.pin2.pedrobino.domain.request.Request;
 import com.pin2.pedrobino.domain.request.RequestFactory;
-import com.pin2.pedrobino.domain.request.RequestStatus;
 import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.user.User;
 import com.querydsl.core.types.ExpressionUtils;
@@ -21,9 +20,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 @Transactional
 @RestController
