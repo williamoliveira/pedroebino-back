@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+import static com.pin2.pedrobino.support.DateUtil.minusDays;
 import static com.pin2.pedrobino.support.DateUtil.plusDays;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,12 +36,12 @@ public class ProposalsCalculatorTest extends BaseTest {
     protected ProposalsCalculator proposalsCalculator;
 
     @Test
-    public void shouldGenerate2NewProposals() {
+    public void shouldGenerate3NewProposals() {
         Date date = plusDays(START_DATE, 2);
 
         List<Proposal> proposals = proposalsCalculator.calculateProposals(
                 date,
-                true,
+                true, // Can be shared!
                 PORTO_ALEGRE,
                 FLORIANOPOLIS,
                 100,
@@ -48,7 +49,7 @@ public class ProposalsCalculatorTest extends BaseTest {
                 500 * 1000 // 500 km
         );
 
-        assertThat(proposals).hasSize(2);
+        assertThat(proposals).hasSize(3);
 
         for (Proposal proposal : proposals) {
             assertThat(proposal).hasFieldOrPropertyWithValue("id", 0L);
@@ -56,10 +57,10 @@ public class ProposalsCalculatorTest extends BaseTest {
     }
 
     @Test
-    public void shouldFind1SharedProposalOnADayThatHasADefinedRequest() {
+    public void shouldFind1SharedProposalAndGenerate2OnADayThatHasADefinedRequest() {
         List<Proposal> proposals = proposalsCalculator.calculateProposals(
                 START_DATE,
-                true,
+                true,  // Can be shared!
                 PORTO_ALEGRE,
                 FLORIANOPOLIS,
                 100,
@@ -67,15 +68,17 @@ public class ProposalsCalculatorTest extends BaseTest {
                 500 * 1000 // 500 km
         );
 
-        assertThat(proposals).hasSize(1);
-        assertThat(proposals.get(0).getId()).isNotZero();
+        assertThat(proposals).hasSize(3);
+        assertThat(proposals.get(0).getId()).isZero();
+        assertThat(proposals.get(1).getId()).isNotZero();
+        assertThat(proposals.get(2).getId()).isZero();
     }
 
     @Test
-    public void shouldNotReturnProposalsOnADayThatHasADefinedRequest() {
+    public void shouldGenerate2ProposalsOnADayThatHasADefinedRequest() {
         List<Proposal> proposals = proposalsCalculator.calculateProposals(
                 START_DATE,
-                false,
+                false,  // Can NOT be shared!
                 PORTO_ALEGRE,
                 FLORIANOPOLIS,
                 100,
@@ -83,6 +86,37 @@ public class ProposalsCalculatorTest extends BaseTest {
                 500 * 1000 // 500 km
         );
 
-        assertThat(proposals).isEmpty();
+        // 2
+        assertThat(proposals).hasSize(2);
+
+        // Is new
+        assertThat(proposals.get(0).getId()).isZero();
+        assertThat(proposals.get(1).getId()).isZero();
+
+        // Is date before and after
+        assertThat(proposals.get(0).getLeavesAt()).isEqualTo(minusDays(START_DATE, 1));
+        assertThat(proposals.get(1).getLeavesAt()).isEqualTo(plusDays(START_DATE, 1));
+    }
+
+    @Test
+    public void shouldGenerate2ProposalsAndNoSharedProposalsBecauseOfVolume() {
+        List<Proposal> proposals = proposalsCalculator.calculateProposals(
+                START_DATE,
+                true,  // Can be shared!
+                PORTO_ALEGRE,
+                FLORIANOPOLIS,
+                700,
+                5 * 60 * 60, // 5 hours
+                500 * 1000 // 500 km
+        );
+
+        assertThat(proposals).hasSize(2);
+
+        // Is new
+        assertThat(proposals.get(0).getId()).isZero();
+        assertThat(proposals.get(1).getId()).isZero();
+
+        assertThat(proposals.get(0).getLeavesAt()).isEqualTo(minusDays(START_DATE, 1));
+        assertThat(proposals.get(1).getLeavesAt()).isEqualTo(plusDays(START_DATE, 1));
     }
 }

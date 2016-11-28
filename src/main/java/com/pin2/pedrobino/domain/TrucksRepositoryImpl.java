@@ -26,8 +26,10 @@ public class TrucksRepositoryImpl extends QueryDslRepositorySupport implements T
                 .where(truck.volume.goe(volume)
                         .and(proposal.isNull() // where drivers has no proposals
                                 .or(truck.notIn(
-                                        from(proposal)
-                                                .where(proposal.leavesAt.lt(dateEnd).and(proposal.arrivesAt.gt(dateStart)))
+                                        from(request)
+                                                .innerJoin(request.chosenProposal, proposal) // right join so we get proposals without requests
+                                                .where(proposal.leavesAt.loe(dateEnd)
+                                                        .and(proposal.arrivesAt.goe(dateStart)))
                                                 .select(proposal.truck))
                                 ))
                 )

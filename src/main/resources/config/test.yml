@@ -37,4 +37,4 @@ closeConnectionIfIdleFor: 60
 
 hibernateHbm2ddlAuto: update
 
-hibernateShowSql: false
+hibernateShowSql: true

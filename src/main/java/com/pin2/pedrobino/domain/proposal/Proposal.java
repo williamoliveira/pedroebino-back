@@ -32,6 +32,9 @@ public class Proposal {
 
     private double value;
 
+    @Column(name = "shared_value")
+    private double sharedValue;
+
     @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "truck_id", nullable = false)
@@ -136,5 +139,27 @@ public class Proposal {
 
     public void setDefinedRequests(List<Request> definedRequests) {
         this.definedRequests = definedRequests;
+    }
+
+    @Override
+    public String toString() {
+        return "Proposal{" +
+                "id=" + id +
+                ", leavesAt=" + leavesAt +
+                ", arrivesAt=" + arrivesAt +
+                ", value=" + value +
+                ", truck=" + truck +
+                ", drivers=" + drivers +
+                ", requests=" + requests +
+                ", definedRequests=" + definedRequests +
+                '}';
+    }
+
+    public double getSharedValue() {
+        return sharedValue;
+    }
+
+    public void setSharedValue(double sharedValue) {
+        this.sharedValue = sharedValue;
     }
 }

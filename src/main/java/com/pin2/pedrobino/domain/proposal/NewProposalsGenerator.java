@@ -90,13 +90,14 @@ class NewProposalsGenerator {
         proposal.setLeavesAt(dateStart);
         proposal.setArrivesAt(dateEnd);
 
-        proposal.setValue(proposalValueCalculator.calculate(
+        proposal.setValue(proposalValueCalculator.calculateValue(
                 proposal.getDrivers(),
                 proposal.getTruck(),
                 travelDuration,
-                distance,
-                canShare
+                distance
         ));
+
+        proposal.setSharedValue(proposalValueCalculator.calculateSharedValue(proposal.getValue()));
 
         return proposal;
     }

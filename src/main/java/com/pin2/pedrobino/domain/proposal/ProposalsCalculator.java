@@ -158,13 +158,14 @@ public class ProposalsCalculator {
         );
 
         if (proposal != null) {
-            proposal.setValue(proposalValueCalculator.calculate(
+            proposal.setValue(proposalValueCalculator.calculateValue(
                     proposal.getDrivers(),
                     proposal.getTruck(),
                     travelDuration,
-                    distance,
-                    canShare
+                    distance
             ));
+
+            proposal.setSharedValue(proposalValueCalculator.calculateSharedValue(proposal.getValue()));
         }
 
         return proposal;

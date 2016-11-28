@@ -29,8 +29,10 @@ public class DriversRepositoryImpl extends QueryDslRepositorySupport implements 
                         .and(driver.maxDistance.goe(distance / 1000)) // max distance driver want to drive
                         .and(proposal.isNull() // where drivers has no proposals
                                 .or(driver.notIn(
-                                        from(proposal).where(proposal.leavesAt.lt(dateEnd)
-                                                .and(proposal.arrivesAt.gt(dateStart))).select(proposal.drivers.any())
+                                        from(request)
+                                                .where(request.chosenProposal.leavesAt.loe(dateEnd)
+                                                .and(request.chosenProposal.arrivesAt.goe(dateStart)))
+                                                .select(request.chosenProposal.drivers.any())
                                         )
                                 ))
                 )

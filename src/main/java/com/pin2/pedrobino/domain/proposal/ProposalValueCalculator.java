@@ -15,11 +15,10 @@ public class ProposalValueCalculator {
     @Autowired
     private SettingsService settingsService;
 
-    public double calculate(List<Driver> drivers,
-                            Truck truck,
-                            long travelDuration,
-                            long distance,
-                            boolean canShare) {
+    public double calculateValue(List<Driver> drivers,
+                                 Truck truck,
+                                 long travelDuration,
+                                 long distance) {
         double value = 0;
 
         // Drivers cost
@@ -35,12 +34,11 @@ public class ProposalValueCalculator {
         // Owner Profit Margin
         value += value * (getProfitMargin() / 100);
 
-        // Conditional Shared discount
-        if (canShare) {
-            value -= value * (getSharedDiscount() / 100);
-        }
-
         return value;
+    }
+
+    public double calculateSharedValue(double value){
+        return value - value * (getSharedDiscount() / 100);
     }
 
     private double getSharedDiscount() {
