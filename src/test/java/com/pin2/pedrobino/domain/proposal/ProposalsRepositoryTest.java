@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProposalsRepositoryTest extends BaseTest {
 
     @Test
-    public void shouldFindOneProposal() {
+    public void shouldFindAProposal() {
         Proposal proposal = proposalsRepository.findBestShareableProposal(
                 START_DATE,
                 PORTO_ALEGRE,
@@ -40,7 +40,7 @@ public class ProposalsRepositoryTest extends BaseTest {
     }
 
     @Test
-    public void shouldNotFindOneProposalBecauseOfTruckVolume() {
+    public void shouldNotFindAProposalBecauseOfTruckVolume() {
         Proposal proposal = proposalsRepository.findBestShareableProposal(
                 START_DATE,
                 PORTO_ALEGRE,
@@ -52,7 +52,7 @@ public class ProposalsRepositoryTest extends BaseTest {
     }
 
     @Test
-    public void shouldNotFindOneProposalBecauseOfDate() {
+    public void shouldNotFindAProposalBecauseOfDate() {
         Proposal proposal = proposalsRepository.findBestShareableProposal(
                 plusDays(START_DATE, 2),
                 PORTO_ALEGRE,
@@ -64,7 +64,7 @@ public class ProposalsRepositoryTest extends BaseTest {
     }
 
     @Test
-    public void shouldNotFindOneProposalBecauseOfFromCity() {
+    public void shouldNotFindAProposalBecauseOfFromCity() {
         Proposal proposal = proposalsRepository.findBestShareableProposal(
                 START_DATE,
                 CURITIBA,
@@ -76,7 +76,7 @@ public class ProposalsRepositoryTest extends BaseTest {
     }
 
     @Test
-    public void shouldNotFindOneProposalBecauseOfToCity() {
+    public void shouldNotFindAProposalBecauseOfToCity() {
         Proposal proposal = proposalsRepository.findBestShareableProposal(
                 START_DATE,
                 PORTO_ALEGRE,

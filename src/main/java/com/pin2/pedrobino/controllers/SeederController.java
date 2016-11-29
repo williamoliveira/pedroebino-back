@@ -108,9 +108,11 @@ public class SeederController {
         State sc = new State("SC", "Santa Catarina");
         State pr = new State("PR", "Paraná");
         State rs = new State("RS", "Rio Grande do Sul");
+        State ac = new State("AC", "Acre");
         statesRepository.save(sc);
         statesRepository.save(rs);
         statesRepository.save(pr);
+        statesRepository.save(ac);
 
         City florianopolis = new City("Florianópolis", sc);
         citiesRepository.save(florianopolis);
@@ -120,6 +122,9 @@ public class SeederController {
 
         City portoAlegre = new City("Porto Alegre", rs);
         citiesRepository.save(portoAlegre);
+
+        City rioBranco = new City("Rio Branco", ac);
+        citiesRepository.save(rioBranco);
 
         // Drivers
         Driver driver = new Driver("João Machado", 25 * 365, 30, 3000, "D", portoAlegre);
