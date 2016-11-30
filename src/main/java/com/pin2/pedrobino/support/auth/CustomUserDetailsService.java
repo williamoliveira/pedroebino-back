@@ -2,6 +2,7 @@ package com.pin2.pedrobino.support.auth;
 
 import com.pin2.pedrobino.domain.user.User;
 import com.pin2.pedrobino.domain.user.UsersRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,8 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // Trigger lazy load
-        // TODO find a real way to do this
-        System.out.println(user.getPerson());
+        Hibernate.initialize(user.getPerson());
 
         return new AuthUser(user);
     }

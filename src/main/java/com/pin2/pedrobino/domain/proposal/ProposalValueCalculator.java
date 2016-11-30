@@ -1,8 +1,8 @@
 package com.pin2.pedrobino.domain.proposal;
 
-import com.pin2.pedrobino.domain.Truck;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.settings.SettingsService;
+import com.pin2.pedrobino.domain.truck.Truck;
 import com.pin2.pedrobino.support.ConvertTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class ProposalValueCalculator {
         return value;
     }
 
-    public double calculateSharedValue(double value){
+    public double calculateSharedValue(double value) {
         return value - value * (getSharedDiscount() / 100);
     }
 

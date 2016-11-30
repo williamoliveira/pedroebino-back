@@ -1,4 +1,4 @@
-package com.pin2.pedrobino.domain;
+package com.pin2.pedrobino.domain.truck;
 
 import com.pin2.pedrobino.support.repository.BaseRepository;
 import org.springframework.stereotype.Repository;

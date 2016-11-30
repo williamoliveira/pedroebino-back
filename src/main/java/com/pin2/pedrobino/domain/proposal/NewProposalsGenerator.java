@@ -1,10 +1,10 @@
 package com.pin2.pedrobino.domain.proposal;
 
-import com.pin2.pedrobino.domain.Truck;
-import com.pin2.pedrobino.domain.TrucksRepository;
 import com.pin2.pedrobino.domain.city.City;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.driver.DriversRepository;
+import com.pin2.pedrobino.domain.truck.Truck;
+import com.pin2.pedrobino.domain.truck.TrucksRepository;
 import com.pin2.pedrobino.support.ConvertTime;
 import com.pin2.pedrobino.support.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
