@@ -1,7 +1,5 @@
 package com.pin2.pedrobino.controllers;
 
-import com.pin2.pedrobino.domain.Truck;
-import com.pin2.pedrobino.domain.TrucksRepository;
 import com.pin2.pedrobino.domain.administrator.Administrator;
 import com.pin2.pedrobino.domain.administrator.AdministratorsRepository;
 import com.pin2.pedrobino.domain.city.CitiesRepository;
@@ -20,12 +18,14 @@ import com.pin2.pedrobino.domain.request.RequestFactory;
 import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.settings.Settings;
 import com.pin2.pedrobino.domain.settings.SettingsService;
+import com.pin2.pedrobino.domain.truck.Truck;
+import com.pin2.pedrobino.domain.truck.TrucksRepository;
 import com.pin2.pedrobino.domain.user.User;
 import com.pin2.pedrobino.domain.user.UsersRepository;
 import com.pin2.pedrobino.support.DateUtil;
+import com.pin2.pedrobino.support.PasswordHasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -94,14 +94,21 @@ public class SeederController {
         Administrator admin = new Administrator("Administrator");
         administratorsRepository.save(admin);
 
-        User adminUser = new User("admin@admin.com", (new BCryptPasswordEncoder()).encode("12345678"), admin);
+        User adminUser = new User(
+                "admin@admin.com",
+                PasswordHasher.hash("12345678"),
+                admin
+        );
         usersRepository.save(adminUser);
 
         // Client
         Client client = new Client("John Doe");
         clientsRepository.save(client);
 
-        User clientUser = new User("johndoe@gmail.com", (new BCryptPasswordEncoder()).encode("12345678"), client);
+        User clientUser = new User(
+                "johndoe@gmail.com",
+                PasswordHasher.hash("12345678"),
+                client);
         usersRepository.save(clientUser);
 
         // States

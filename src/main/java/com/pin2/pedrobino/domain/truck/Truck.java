@@ -1,4 +1,4 @@
-package com.pin2.pedrobino.domain;
+package com.pin2.pedrobino.domain.truck;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pin2.pedrobino.domain.proposal.Proposal;

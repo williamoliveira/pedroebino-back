@@ -1,9 +1,9 @@
 package com.pin2.pedrobino.domain.driver;
 
-import com.pin2.pedrobino.domain.Truck;
 import com.pin2.pedrobino.domain.city.City;
 import com.pin2.pedrobino.domain.proposal.QProposal;
 import com.pin2.pedrobino.domain.request.QRequest;
+import com.pin2.pedrobino.domain.truck.Truck;
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +31,7 @@ public class DriversRepositoryImpl extends QueryDslRepositorySupport implements 
                                 .or(driver.notIn(
                                         from(request)
                                                 .where(request.chosenProposal.leavesAt.loe(dateEnd)
-                                                .and(request.chosenProposal.arrivesAt.goe(dateStart)))
+                                                        .and(request.chosenProposal.arrivesAt.goe(dateStart)))
                                                 .select(request.chosenProposal.drivers.any())
                                         )
                                 ))

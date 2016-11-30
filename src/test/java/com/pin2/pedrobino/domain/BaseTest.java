@@ -14,8 +14,11 @@ import com.pin2.pedrobino.domain.request.RequestFactory;
 import com.pin2.pedrobino.domain.request.RequestsRepository;
 import com.pin2.pedrobino.domain.settings.Settings;
 import com.pin2.pedrobino.domain.settings.SettingsService;
+import com.pin2.pedrobino.domain.truck.Truck;
+import com.pin2.pedrobino.domain.truck.TrucksRepository;
 import com.pin2.pedrobino.domain.user.User;
 import com.pin2.pedrobino.domain.user.UsersRepository;
+import com.pin2.pedrobino.support.PasswordHasher;
 import org.junit.After;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +80,7 @@ public abstract class BaseTest {
 
         User clientUser = new User(
                 "johndoe@gmail.com",
-                (new BCryptPasswordEncoder()).encode("12345678"),
+                PasswordHasher.hash("12345678"),
                 CLIENT1
         );
         usersRepository.save(clientUser);

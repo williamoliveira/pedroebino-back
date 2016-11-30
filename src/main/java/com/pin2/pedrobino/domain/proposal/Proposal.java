@@ -2,9 +2,9 @@ package com.pin2.pedrobino.domain.proposal;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pin2.pedrobino.domain.Truck;
 import com.pin2.pedrobino.domain.driver.Driver;
 import com.pin2.pedrobino.domain.request.Request;
+import com.pin2.pedrobino.domain.truck.Truck;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

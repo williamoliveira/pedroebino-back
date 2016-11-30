@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pin2.pedrobino.domain.administrator.Administrator;
 import com.pin2.pedrobino.domain.client.Client;
 import com.pin2.pedrobino.domain.person.Person;
-import org.hibernate.annotations.Any;
-import org.hibernate.annotations.AnyMetaDef;
-import org.hibernate.annotations.MetaValue;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -42,6 +43,7 @@ public class User {
             }
     )
     @JoinColumn(name = "person_id")
+    @Cascade(CascadeType.ALL)
     private Person person;
 
     public User() {
@@ -65,6 +67,14 @@ public class User {
         this.email = email;
         this.password = password;
         this.person = person;
+    }
+
+    public String getRole() {
+        if (getPerson() instanceof Administrator) {
+            return "ADMIN";
+        }
+
+        return "CLIENT";
     }
 
     public long getId() {

@@ -3,7 +3,6 @@ package com.pin2.pedrobino.domain.truck;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.pin2.pedrobino.Application;
 import com.pin2.pedrobino.domain.BaseTest;
-import com.pin2.pedrobino.domain.Truck;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
