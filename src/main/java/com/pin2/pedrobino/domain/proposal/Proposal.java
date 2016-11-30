@@ -69,6 +69,12 @@ public class Proposal {
         this.requests = requests;
     }
 
+    public int getDefinedRequestsCount(){
+        return (definedRequests != null)
+                ? definedRequests.size()
+                : 0;
+    }
+
     public long getId() {
         return id;
     }

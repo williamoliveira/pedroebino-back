@@ -92,8 +92,6 @@ public class SeederController {
 
         // Administrator
         Administrator admin = new Administrator("Administrator");
-        administratorsRepository.save(admin);
-
         User adminUser = new User(
                 "admin@admin.com",
                 PasswordHasher.hash("12345678"),
@@ -103,8 +101,6 @@ public class SeederController {
 
         // Client
         Client client = new Client("John Doe");
-        clientsRepository.save(client);
-
         User clientUser = new User(
                 "johndoe@gmail.com",
                 PasswordHasher.hash("12345678"),
@@ -184,68 +180,6 @@ public class SeederController {
     void contextRefreshedEvent() {
         System.out.println("Context Refreshed");
 
-//        System.out.println(
-//                trucksRepository.findAvailableTrucks(
-//                        createDate("17/12/2016 01:00"),
-//                        createDate("17/12/2016 07:00"),
-//                        100.0
-//                )
-//        );
-//
-//        System.out.println(
-//                trucksRepository.findAvailableTrucks(
-//                        createDate("20/12/2016 00:00"),
-//                        createDate("20/12/2016 07:00"),
-//                        100.0
-//                )
-//        );
-
-//        System.out.println("0");
-//        System.out.println(
-//                driversRepository.findAvailableDrivers(
-//                        createDate("17/12/2016 00:00"),
-//                        createDate("17/12/2016 07:00"),
-//                        citiesRepository.findByName("Porto Alegre"),
-//                        400
-//                )
-//        );
-//
-//        System.out.println("1");
-//        System.out.println(
-//                driversRepository.findAvailableDrivers(
-//                        createDate("20/12/2016 00:00"),
-//                        createDate("20/12/2016 07:00"),
-//                        citiesRepository.findByName("Porto Alegre"),
-//                        400
-//                )
-//        );
-
-//
-//        Request request = requestsRepository.findAll().get(0);
-//
-//        List<Proposal> proposals = proposalsCalculator.calculateProposals(request);
-//
-//        System.out.println(proposals);
-
-        Proposal proposal = proposalsRepository.findBestShareableProposal(
-                DateUtil.createDate("17/12/2016 00:00"),
-                citiesRepository.findByName("Porto Alegre"),
-                citiesRepository.findByName("Florianópolis"),
-                100
-        );
-
-        System.out.println("Proposals 1:");
-        System.out.println(proposal);
-
-        proposal = proposalsRepository.findBestShareableProposal(
-                DateUtil.createDate("20/12/2016 00:00"),
-                citiesRepository.findByName("Porto Alegre"),
-                citiesRepository.findByName("Florianópolis"),
-                100
-        );
-
-        System.out.println("Proposals 0:");
-        System.out.println(proposal);
     }
 
 }
