@@ -1,19 +1,17 @@
 # Pedro&Bino Backend
 
-[Repositório do Frontend](https://github.com/williamoliveira/pedroebino-front)
+[Frontend Repository >](https://github.com/williamoliveira/pedroebino-front)
 
-## Descrição
+## Description
+Backend of the Pedro & Bino application, built in Java as an HTTP REST API server,
+Which consumes and returns JSON, using the [Spring](http://projects.spring.io/spring-boot/). framework.
+Uses JPA as the persistence layer and the OAuth2 protocol for authentication.
 
-Backend da aplicação Pedro&Bino, construída em Java como sendo um servidor API REST HTTP,
-que consome e retorna JSON, utilizando a framework [Spring](http://projects.spring.io/spring-boot/).
-Utiliza JPA como camada de persistência e o protocolo OAuth2 para autenticação.
-
-## Requisitos
+## Requirements
 - Java EE
-- Uma IDE (testado com Netbeans e IntelliJ IDEA)
 
-## Uso
+## Usage
 
-- Clone (`git clone git@github.com:williamoliveira/pedroebino-back.git`) ou [baixe](https://github.com/williamoliveira/pedroebino-back/archive/master.zip) o repositório do projeto
+- Clone (`git clone git@github.com:williamoliveira/pedroebino-back.git`) or [download](https://github.com/williamoliveira/pedroebino-back/archive/master.zip) the project repository
 
-- Importe o projeto na sua IDE
+- Open the project on your IDE
